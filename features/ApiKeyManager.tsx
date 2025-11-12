@@ -1,0 +1,89 @@
+
+import React, { useState, useEffect } from 'react';
+import { useSettings } from '../contexts/SettingsContext';
+import { Button } from '../components/Button';
+import { CheckIcon } from '../components/icons';
+
+const ApiKeyManager: React.FC = () => {
+  const { 
+    // FIX: Removed Gemini key from settings context as it should come from environment variables.
+    upscalerApiKey, setUpscalerApiKey,
+    bgRemoverApiKey, setBgRemoverApiKey
+  } = useSettings();
+
+  // FIX: Removed local state for Gemini key.
+  const [localRapidApiKey, setLocalRapidApiKey] = useState('');
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+
+  useEffect(() => {
+    // Since both RapidAPI keys should be the same, use whichever is available.
+    setLocalRapidApiKey(bgRemoverApiKey || upscalerApiKey);
+  }, [upscalerApiKey, bgRemoverApiKey]);
+
+  const handleSave = () => {
+    setSaveStatus('saving');
+    // FIX: Removed saving of Gemini key.
+    // Set both RapidAPI-dependent keys with the single value
+    setUpscalerApiKey(localRapidApiKey);
+    setBgRemoverApiKey(localRapidApiKey);
+    setTimeout(() => {
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus('idle'), 1500);
+    }, 500);
+  };
+
+  const ApiCard = ({ title, description, link, linkText, value, onChange, placeholder }: any) => (
+    <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 space-y-4">
+        <div className="flex-grow">
+          <h3 className="text-lg font-semibold text-teal-400">{title}</h3>
+          <p className="text-sm text-gray-400 mt-1">{description}</p>
+        </div>
+        <div>
+            <label htmlFor={`${title}-key`} className="sr-only">{title} API Key</label>
+            <input
+                type="password"
+                id={`${title}-key`}
+                value={value}
+                onChange={onChange}
+                placeholder={placeholder}
+                className="custom-input"
+            />
+            <p className="text-xs text-gray-500 mt-2">Dapatkan kunci gratis Anda dari <a href={link} target="_blank" rel="noopener noreferrer" className="underline hover:text-teal-400">{linkText}</a>.</p>
+        </div>
+    </div>
+  );
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-8">
+       <div className="text-center">
+        <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+          Pengaturan Kunci API
+        </h2>
+        <p className="mt-4 text-lg leading-8 text-gray-400">
+          Kelola kunci untuk fitur AI. Kunci disimpan secara lokal di browser Anda. Kunci Google Gemini dikonfigurasi secara terpusat.
+        </p>
+      </div>
+
+      <div className="space-y-6">
+        {/* FIX: Removed ApiCard for Google Gemini to comply with API key guidelines. */}
+        <ApiCard
+          title="Kunci RapidAPI"
+          description="Satu kunci untuk: Penghapus Latar Belakang, Peningkat Skala, Penajam Gambar & Pemburaman Wajah."
+          link="https://rapidapi.com/hub"
+          linkText="RapidAPI Hub"
+          value={localRapidApiKey}
+          onChange={(e: any) => setLocalRapidApiKey(e.target.value)}
+          placeholder="Masukkan kunci RapidAPI Anda"
+        />
+        
+        <div className="flex justify-end pt-4">
+            <Button onClick={handleSave} isLoading={saveStatus === 'saving'}>
+                {saveStatus === 'saved' ? <><CheckIcon /> Tersimpan!</> : 'Simpan Semua Pengaturan'}
+            </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ApiKeyManager;
