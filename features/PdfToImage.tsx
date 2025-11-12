@@ -1,4 +1,5 @@
 
+
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { Button } from '../components/Button';
@@ -380,11 +381,11 @@ const PdfToImage: React.FC = () => {
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-4 space-y-6">
         <div className="bg-gray-800 rounded-lg p-6 space-y-6 border border-gray-700">
-          <h3 className="text-lg font-semibold text-white">Pengaturan Konversi</h3>
+          <h3 className="text-lg font-semibold text-white">Conversion Settings</h3>
 
           {/* Page Range Input */}
           <div>
-            <label htmlFor="page-range" className="block text-sm font-medium text-gray-300 mb-2">Rentang Halaman</label>
+            <label htmlFor="page-range" className="block text-sm font-medium text-gray-300 mb-2">Page Range</label>
             <input
               type="text"
               id="page-range"
@@ -394,13 +395,13 @@ const PdfToImage: React.FC = () => {
               placeholder="e.g., all, 1-5, 3,7,9"
               disabled={!pdfFile || pdfLoading || isLoading}
             />
-            {numPages !== null && <p className="text-xs text-gray-500 mt-1">Total {numPages} halaman. (Gunakan angka antara 1 dan {numPages})</p>}
+            {numPages !== null && <p className="text-xs text-gray-500 mt-1">Total {numPages} pages. (Use numbers between 1 and {numPages})</p>}
           </div>
 
           {/* DPI Slider */}
           <div>
             <label htmlFor="dpi-slider" className="flex justify-between text-sm font-medium text-gray-300 mb-2">
-              <span>Resolusi (DPI)</span>
+              <span>Resolution (DPI)</span>
               <span className="font-mono text-teal-300 text-lg">{dpi}</span>
             </label>
             <input
@@ -412,14 +413,14 @@ const PdfToImage: React.FC = () => {
               value={dpi}
               onChange={(e) => setDpi(parseInt(e.target.value, 10))}
               className="w-full range-slider"
-              aria-label="Resolusi Gambar (DPI)"
+              aria-label="Image Resolution (DPI)"
               disabled={!pdfFile || pdfLoading || isLoading}
             />
           </div>
 
           {/* Image Format Select */}
           <div>
-            <label htmlFor="image-format" className="block text-sm font-medium text-gray-300 mb-2">Format Gambar</label>
+            <label htmlFor="image-format" className="block text-sm font-medium text-gray-300 mb-2">Image Format</label>
             <select
               id="image-format"
               className="custom-input"
@@ -437,7 +438,7 @@ const PdfToImage: React.FC = () => {
           {showQualitySlider && (
             <div>
               <label htmlFor="image-quality-slider" className="flex justify-between text-sm font-medium text-gray-300 mb-2">
-                <span>Kualitas Gambar</span>
+                <span>Image Quality</span>
                 <span className="font-mono text-teal-300 text-lg">{Math.round(imageQuality * 100)}%</span>
               </label>
               <input
@@ -449,39 +450,40 @@ const PdfToImage: React.FC = () => {
                 value={imageQuality}
                 onChange={(e) => setImageQuality(parseFloat(e.target.value))}
                 className="w-full range-slider"
-                aria-label="Kualitas Gambar"
+                aria-label="Image Quality"
                 disabled={!pdfFile || pdfLoading || isLoading}
               />
-              <p className="text-xs text-gray-500 mt-1">Kualitas lebih rendah menghasilkan ukuran file lebih kecil.</p>
+              <p className="text-xs text-gray-500 mt-1">Lower quality results in a smaller file size.</p>
             </div>
           )}
         </div>
 
         <div className="flex flex-col gap-4">
           <Button onClick={handleConvertPdf} isLoading={isLoading} icon={<PdfIcon />} disabled={!isConvertEnabled}>
-            {isLoading ? 'Mengonversi...' : 'Konversi PDF'}
+            {isLoading ? 'Converting...' : 'Convert PDF'}
           </Button>
           <Button onClick={handleDownloadAll} variant="secondary" icon={<ArrowDownTrayIcon />} disabled={!isDownloadEnabled || isLoading}>
-            Unduh Semua ({generatedImages.length})
+            Download All ({generatedImages.length})
           </Button>
           <Button onClick={handleDownloadSelected} variant="secondary" icon={<ArrowDownTrayIcon />} disabled={!isSelectedDownloadEnabled || isLoading}>
-            Unduh Pilihan ({selectedImages.size})
+            Download Selected ({selectedImages.size})
           </Button>
         </div>
         <Button onClick={handleReset} variant="outline" icon={<ArrowUturnLeftIcon />} disabled={!pdfFile && generatedImages.length === 0}>
-          Mulai Ulang
+          Start Over
         </Button>
       </div>
 
       <div className="lg:col-span-8">
         <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 sticky top-24">
-          <h3 className="text-lg font-semibold text-white mb-4 px-2">File PDF dan Pratinjau Gambar</h3>
+          <h3 className="text-lg font-semibold text-white mb-4 px-2">PDF File & Image Preview</h3>
           {!pdfFile ? (
             <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh]">
+              {/* FIX: ImageUploader now correctly accepts disabled prop */}
               <ImageUploader
                 onFileSelect={handlePdfUpload}
-                title="Unggah file PDF Anda"
-                description="Hanya file PDF yang didukung"
+                title="Upload your PDF file"
+                description="Only PDF files are supported"
                 accept="application/pdf"
                 multiple={false}
                 disabled={isUploaderDisabled}
@@ -492,7 +494,7 @@ const PdfToImage: React.FC = () => {
               {pdfLoading && (
                 <div className="bg-gray-900/50 p-2 rounded-lg flex flex-col items-center justify-center min-h-[10rem] relative mb-4">
                   <LoadingSpinner />
-                  <p className="text-gray-400 mt-2">Memuat PDF...</p>
+                  <p className="text-gray-400 mt-2">Loading PDF...</p>
                 </div>
               )}
               {error && (
@@ -521,21 +523,21 @@ const PdfToImage: React.FC = () => {
 
               {generatedImages.length > 0 && (
                 <div className="flex justify-between items-center mb-4 px-2">
-                  <span className="text-sm text-gray-400">Pilih gambar untuk diunduh secara terpisah</span>
+                  <span className="text-sm text-gray-400">Select images to download individually</span>
                   <Button
                     onClick={handleToggleSelectAll}
                     variant="secondary"
                     className="px-3 py-1.5 text-xs"
                     disabled={generatedImages.length === 0}
                   >
-                    {selectedImages.size === generatedImages.length && generatedImages.length > 0 ? 'Batalkan Pilihan Semua' : 'Pilih Semua'}
+                    {selectedImages.size === generatedImages.length && generatedImages.length > 0 ? 'Deselect All' : 'Select All'}
                   </Button>
                 </div>
               )}
               {isLoading && (
                 <div className="bg-gray-900/50 p-2 rounded-lg flex flex-col items-center justify-center min-h-[20vh] relative">
                   <LoadingSpinner />
-                  <p className="text-gray-400 mt-4">Mengonversi halaman PDF...</p>
+                  <p className="text-gray-400 mt-4">Converting PDF pages...</p>
                 </div>
               )}
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-2 bg-gray-900/50 rounded-lg">
@@ -548,11 +550,13 @@ const PdfToImage: React.FC = () => {
                   >
                     <img src={img.dataUrl} alt={`Page ${img.pageNum}`} className="object-cover w-full h-full" />
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span className="text-white text-lg font-bold">Halaman {img.pageNum}</span>
+                      <span className="text-white text-lg font-bold">Page {img.pageNum}</span>
                       <div className="absolute top-2 right-2">
+                        {/* FIX: CheckIcon now correctly accepts className */}
                         {selectedImages.has(img.id) ? (
                           <CheckIcon className="w-5 h-5 text-teal-400 bg-black/70 rounded-full p-0.5" />
                         ) : (
+                          // FIX: XMarkIcon now correctly accepts className
                           <XMarkIcon className="w-5 h-5 text-gray-400 bg-black/70 rounded-full p-0.5 opacity-0 group-hover:opacity-100" />
                         )}
                       </div>

@@ -4,6 +4,7 @@ import { Button } from '../components/Button';
 import { downloadImage } from '../utils/imageUtils';
 import { removeBackgroundWithAI } from '../services/backgroundRemovalService';
 import { RemoveBgIcon, ArrowDownTrayIcon, ArrowUturnLeftIcon, AIIcon } from '../components/icons';
+import { ImageComparator } from '../components/ImageComparator';
 
 const RemoveBackground: React.FC = () => {
     const [imageFile, setImageFile] = useState<File | null>(null);
@@ -100,32 +101,33 @@ const RemoveBackground: React.FC = () => {
                             <ImageUploader onFileSelect={handleImageUpload} multiple={false} accept="image/*" />
                         </div>
                     ) : (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <h4 className="text-center text-sm font-semibold mb-2 text-gray-300">Original</h4>
-                            <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[25rem]">
-                                <img src={imageUrl ?? ''} alt="Original" className="max-w-full object-contain rounded-md" />
-                            </div>
-                        </div>
-                        <div>
-                            <h4 className="text-center text-sm font-semibold mb-2 text-gray-300">Result</h4>
-                            <div className="checkerboard-bg p-2 rounded-lg flex items-center justify-center min-h-[25rem]">
-                                {isLoading ? (
-                                    <div className="flex flex-col items-center justify-center text-gray-300">
+                        <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] relative">
+                            {isLoading && (
+                                <>
+                                    <img src={imageUrl ?? ''} alt="Processing" className="max-w-full object-contain rounded-md opacity-40"/>
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-300 bg-gray-900/50">
                                         <svg className="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                         </svg>
                                         <span className="mt-4 text-sm">Processing...</span>
                                     </div>
-                                ) : resultUrl ? (
-                                    <img src={resultUrl} alt="Background removed" className="max-w-full object-contain" />
-                                ) : (
-                                    <div className="text-gray-400 text-sm p-4 text-center">Result will appear here</div>
-                                )}
-                            </div>
+                                </>
+                            )}
+                            {!isLoading && resultUrl && imageUrl && (
+                                <div className="w-full checkerboard-bg rounded-lg">
+                                    <ImageComparator 
+                                        beforeSrc={imageUrl} 
+                                        afterSrc={resultUrl}
+                                        beforeLabel='Original'
+                                        afterLabel='Result'
+                                    />
+                                </div>
+                            )}
+                            {!isLoading && !resultUrl && imageUrl && (
+                                <img src={imageUrl} alt="Original" className="max-w-full object-contain rounded-md"/>
+                            )}
                         </div>
-                    </div>
                     )}
                 </div>
             </div>

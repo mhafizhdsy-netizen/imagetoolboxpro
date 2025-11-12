@@ -1,9 +1,12 @@
+
+
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { Button } from '../components/Button';
-import { downloadImage } from '../utils/imageUtils';
-import { ArrowDownTrayIcon, ArrowUturnLeftIcon, PdfIcon, XMarkIcon } from '../components/icons';
+import { downloadImage, loadImageAsDataURLAndDimensions } from '../utils/imageUtils'; // Changed to loadImageAsDataURLAndDimensions
+import { ArrowDownTrayIcon, ArrowUturnLeftIcon, PdfIcon, XMarkIcon, PlusIcon } from '../components/icons';
 import { jsPDF } from 'jspdf';
+import type { FileWithPreview } from '../types'; // Import FileWithPreview
 
 // Helper to load image as Data URL
 const loadImageAsDataURL = (file: File): Promise<string> => {
@@ -21,15 +24,10 @@ const loadImageAsDataURL = (file: File): Promise<string> => {
   });
 };
 
-interface ImageFileWithPreview extends File {
-  preview: string;
-  id: string; // Unique ID for reordering
-  width?: number; // Store natural width
-  height?: number; // Store natural height
-}
+// Removed ImageFileWithPreview interface as it's now in types.ts
 
 const ImageToPdf: React.FC = () => {
-  const [imageFiles, setImageFiles] = useState<ImageFileWithPreview[]>([]);
+  const [imageFiles, setImageFiles] = useState<FileWithPreview[]>([]);
   const [pageSize, setPageSize] = useState('A4');
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
   const [margin, setMargin] = useState(10); // in mm
@@ -55,28 +53,23 @@ const ImageToPdf: React.FC = () => {
   const handleImagesUpload = async (files: File[]) => {
     setError(null);
     setPdfBlobUrl(null);
-    const newFilesWithPreviews: ImageFileWithPreview[] = [];
+    setIsProcessing(true); // Indicate processing for new uploads
+    const newFilesWithPreviews: FileWithPreview[] = [];
     for (const file of files) {
       try {
-        const preview = await loadImageAsDataURL(file);
-        const img = new Image();
-        img.src = preview;
-        await new Promise((resolve, reject) => {
-          img.onload = resolve;
-          img.onerror = reject;
-        });
-
+        const { dataUrl, width, height } = await loadImageAsDataURLAndDimensions(file); // Use utility
         newFilesWithPreviews.push(Object.assign(file, {
-          preview: preview,
+          preview: dataUrl,
           id: URL.createObjectURL(file), // Use blob URL as unique ID for preview
-          width: img.naturalWidth,
-          height: img.naturalHeight,
+          width,
+          height,
         }));
       } catch (e: any) {
         setError(e.message || `Failed to load image preview or dimensions for ${file.name}.`);
       }
     }
     setImageFiles(prev => [...prev, ...newFilesWithPreviews]);
+    setIsProcessing(false); // End processing for new uploads
   };
 
   const handleRemoveImage = (idToRemove: string) => {
@@ -144,6 +137,12 @@ const ImageToPdf: React.FC = () => {
     e.dataTransfer.dropEffect = "move";
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+        handleImagesUpload(Array.from(e.target.files));
+    }
+  };
+
 
   const generatePdf = useCallback(async () => {
     if (imageFiles.length === 0) {
@@ -175,7 +174,7 @@ const ImageToPdf: React.FC = () => {
         }
 
         const upscaledImagesPromises = imagesToProcess.map(file => {
-          return new Promise<ImageFileWithPreview>((resolve) => {
+          return new Promise<FileWithPreview>((resolve) => {
             if (file.width && file.height && (file.width < largestWidth || file.height < largestHeight)) {
               // Only upscale if the image is actually smaller in at least one dimension than the largest found
               const img = new Image();
@@ -319,11 +318,11 @@ const ImageToPdf: React.FC = () => {
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-4 space-y-6">
         <div className="bg-gray-800 rounded-lg p-6 space-y-6 border border-gray-700">
-          <h3 className="text-lg font-semibold text-white">Pengaturan PDF</h3>
+          <h3 className="text-lg font-semibold text-white">PDF Settings</h3>
 
           {/* Page Size */}
           <div>
-            <label htmlFor="page-size" className="block text-sm font-medium text-gray-300 mb-2">Ukuran Halaman</label>
+            <label htmlFor="page-size" className="block text-sm font-medium text-gray-300 mb-2">Page Size</label>
             <select
               id="page-size"
               className="custom-input"
@@ -339,7 +338,7 @@ const ImageToPdf: React.FC = () => {
 
           {/* Orientation */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-300 mb-2">Orientasi</label>
+            <label className="block text-sm font-medium text-gray-300 mb-2">Orientation</label>
             <div className="flex rounded-lg overflow-hidden bg-gray-700">
               <button
                 className={`flex-1 py-2 px-3 text-sm font-medium transition-colors ${
@@ -348,7 +347,7 @@ const ImageToPdf: React.FC = () => {
                 onClick={() => setOrientation('portrait')}
                 disabled={imageFiles.length === 0}
               >
-                Potret
+                Portrait
               </button>
               <button
                 className={`flex-1 py-2 px-3 text-sm font-medium transition-colors ${
@@ -357,7 +356,7 @@ const ImageToPdf: React.FC = () => {
                 onClick={() => setOrientation('landscape')}
                 disabled={imageFiles.length === 0}
               >
-                Lanskap
+                Landscape
               </button>
             </div>
           </div>
@@ -365,7 +364,7 @@ const ImageToPdf: React.FC = () => {
           {/* Margins */}
           <div>
             <label htmlFor="margin-slider" className="flex justify-between text-sm font-medium text-gray-300 mb-2">
-              <span>Margin Halaman</span>
+              <span>Page Margins</span>
               <span className="font-mono text-teal-300 text-lg">{margin}mm</span>
             </label>
             <input
@@ -393,40 +392,40 @@ const ImageToPdf: React.FC = () => {
                   disabled={imageFiles.length < 2} // Disable if less than 2 images
               />
               <label htmlFor="upscale-images" className="ml-3 block text-sm font-medium text-gray-300">
-                  Perbesar Gambar Lebih Kecil
+                  Upscale Smaller Images
               </label>
           </div>
           {imageFiles.length > 0 && imageFiles.length < 2 && (
-              <p className="text-xs text-gray-500 mt-1">Unggah setidaknya 2 gambar untuk mengaktifkan opsi perbesaran.</p>
+              <p className="text-xs text-gray-500 mt-1">Upload at least 2 images to enable the upscale option.</p>
           )}
           {upscaleSmallerImages && (
-              <p className="text-xs text-gray-500 mt-1">Gambar yang lebih kecil akan diperbesar agar sesuai dengan dimensi gambar terbesar (menjaga rasio aspek).</p>
+              <p className="text-xs text-gray-500 mt-1">Smaller images will be upscaled to match the dimensions of the largest image (maintaining aspect ratio).</p>
           )}
 
         </div>
 
         <div className="flex flex-col gap-4">
           <Button onClick={generatePdf} isLoading={isProcessing} icon={<PdfIcon />} disabled={imageFiles.length === 0}>
-            Buat PDF
+            Generate PDF
           </Button>
           <Button onClick={handleDownloadPdf} variant="secondary" disabled={!pdfBlobUrl} icon={<ArrowDownTrayIcon />}>
-            Unduh PDF
+            Download PDF
           </Button>
         </div>
         <Button onClick={handleReset} variant="outline" icon={<ArrowUturnLeftIcon />} disabled={imageFiles.length === 0}>
-          Mulai Ulang
+          Start Over
         </Button>
       </div>
 
       <div className="lg:col-span-8">
         <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 sticky top-24">
-          <h3 className="text-lg font-semibold text-white mb-4 px-2">Gambar Anda</h3>
+          <h3 className="text-lg font-semibold text-white mb-4 px-2">Your Images</h3>
           {!imageFiles.length ? (
             <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh]">
               <ImageUploader
                 onFileSelect={handleImagesUpload} 
-                title="Unggah gambar Anda untuk membuat PDF"
-                description="Pilih banyak file atau seret & lepas di sini"
+                title="Upload your images to create a PDF"
+                description="Select multiple files or drag & drop here"
                 accept="image/*"
                 multiple={true}
               />
@@ -446,7 +445,7 @@ const ImageToPdf: React.FC = () => {
                     onDragEnter={(e) => handleDragEnter(e, index)}
                     onDragLeave={handleDragLeave}
                     onDragEnd={handleDragEnd}
-                    className={`relative group aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg border-2 border-transparent transition-all duration-200 
+                    className={`relative group aspect-square w-full overflow-hidden rounded-lg border-2 border-transparent transition-all duration-200 
                                   ${dragItem.current === index ? 'opacity-50 border-teal-500' : ''}
                                   ${dragOverItem.current === index && dragItem.current !== index ? 'border-teal-400' : ''}`}
                   >
@@ -463,12 +462,32 @@ const ImageToPdf: React.FC = () => {
                       className="absolute top-2 right-2 p-1 bg-red-600/70 text-white rounded-full hover:bg-red-700 transition-colors opacity-0 group-hover:opacity-100"
                       aria-label={`Remove image ${index + 1}`}
                     >
-                      <XMarkIcon />
+                      {/* FIX: XMarkIcon now correctly accepts className as its only prop, resolving the 'faClass missing' error */}
+                      <XMarkIcon className="w-5 h-5" />
                     </button>
                   </div>
                 ))}
+                 {imageFiles.length > 0 && (
+                  <label 
+                    htmlFor="add-more-files-input" 
+                    className="group flex flex-col items-center justify-center text-center p-2 aspect-square rounded-lg border-2 border-dashed border-gray-600 bg-gray-800/50 text-gray-400 transition-colors hover:border-teal-500 hover:text-teal-400 cursor-pointer focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-800 focus-within:ring-teal-400"
+                    title="Add more images"
+                  >
+                    <PlusIcon className="w-8 h-8" />
+                    <span className="mt-2 text-sm font-semibold">Add More</span>
+                    <input
+                      id="add-more-files-input"
+                      type="file"
+                      className="sr-only"
+                      accept="image/*"
+                      multiple
+                      onChange={handleFileChange}
+                      disabled={isProcessing}
+                    />
+                  </label>
+                )}
               </div>
-              <p className="text-gray-500 text-sm mt-3 px-2">Seret dan lepas gambar untuk mengubah urutan halaman.</p>
+              <p className="text-gray-500 text-sm mt-3 px-2">Drag and drop images to reorder the pages.</p>
             </>
           )}
           {error && (
@@ -479,7 +498,7 @@ const ImageToPdf: React.FC = () => {
           )}
           {pdfBlobUrl && !isProcessing && (
             <div className="mt-4 p-3 bg-teal-500/10 border border-teal-500/20 rounded-lg text-center">
-              <p className="font-medium text-sm text-teal-300">PDF berhasil dibuat! Unduh sekarang.</p>
+              <p className="font-medium text-sm text-teal-300">PDF generated successfully! Download now.</p>
             </div>
           )}
         </div>

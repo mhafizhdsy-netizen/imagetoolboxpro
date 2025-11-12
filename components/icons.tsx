@@ -2,10 +2,23 @@
 
 import React from 'react';
 
-// Wrapper untuk menghindari pengulangan pengetikan React.FC
-const Icon: React.FC<{ faClass: string }> = ({ faClass }) => <i className={faClass}></i>;
+// FIX: Define a base props interface for icons that wraps the generic Icon component
+interface SpecificIconProps {
+  className?: string;
+  // Allows children for components that might wrap text, like the XMarkIcon in Sidebar
+  children?: React.ReactNode; 
+  // Allow other standard HTML button/div props to be passed down
+  onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLDivElement>;
+  title?: string;
+  'aria-label'?: string;
+  role?: string;
+  tabIndex?: number;
+}
 
-// Ikon untuk Sidebar (dengan fa-fw untuk perataan lebar tetap)
+// FIX: Wrapper to accept className prop
+const Icon: React.FC<{ faClass: string; className?: string }> = ({ faClass, className }) => <i className={`${faClass} ${className || ''}`}></i>;
+
+// Icons for Sidebar (with fa-fw for fixed-width alignment)
 export const AIIcon: React.FC = () => <Icon faClass="fa-solid fa-wand-magic-sparkles fa-fw" />;
 export const DocumentIconSidebar: React.FC = () => <Icon faClass="fa-solid fa-file-lines fa-fw" />; // Renamed from DocumentIcon
 export const ResizeIcon: React.FC = () => <Icon faClass="fa-solid fa-expand fa-fw" />;
@@ -22,10 +35,18 @@ export const ColorSwatchIcon: React.FC = () => <Icon faClass="fa-solid fa-palett
 export const GearIcon: React.FC = () => <Icon faClass="fa-solid fa-gear fa-fw" />;
 export const PdfIcon: React.FC = () => <Icon faClass="fa-solid fa-file-pdf fa-fw" />; // New PDF Icon
 export const GridIcon: React.FC = () => <Icon faClass="fa-solid fa-table-cells fa-fw" />; // New Grid Icon
+export const NoiseIcon: React.FC = () => <Icon faClass="fa-solid fa-wave-square fa-fw" />; // New Noise Icon
+export const CollageIcon: React.FC = () => <Icon faClass="fa-solid fa-grip" />; // New Collage Icon
+export const StitchIcon: React.FC = () => <Icon faClass="fa-solid fa-arrows-left-right-to-line" />; // New Image Stitching Icon
+export const QuestionMarkCircleIcon: React.FC = () => <Icon faClass="fa-solid fa-circle-question fa-fw" />;
 
-// Ikon yang digunakan di bagian lain UI (tombol, header, dll.) - tidak perlu fa-fw
+
+// Icons used in other UI parts (buttons, header, etc.) - no fa-fw needed
 export const AppIcon: React.FC = () => <Icon faClass="fa-solid fa-toolbox" />;
-export const XMarkIcon: React.FC = () => <Icon faClass="fa-solid fa-xmark" />;
+// FIX: Pass props to allow className and define type as SpecificIconProps
+export const XMarkIcon: React.FC<SpecificIconProps> = ({ children, ...props }) => (
+  <span {...props}><Icon faClass="fa-solid fa-xmark" /><span className="sr-only">{children}</span></span>
+); 
 export const Bars3Icon: React.FC = () => <Icon faClass="fa-solid fa-bars" />;
 export const PhotoIcon: React.FC = () => <Icon faClass="fa-solid fa-image" />;
 export const DocumentIconNoFw: React.FC = () => <Icon faClass="fa-solid fa-file-lines" />; // New icon without fa-fw
@@ -33,7 +54,14 @@ export const ArrowDownTrayIcon: React.FC = () => <Icon faClass="fa-solid fa-down
 export const ArrowUturnLeftIcon: React.FC = () => <Icon faClass="fa-solid fa-arrow-rotate-left" />;
 export const ArrowUturnRightIcon: React.FC = () => <Icon faClass="fa-solid fa-arrow-rotate-right" />;
 export const ViewfinderCircleIcon: React.FC = () => <Icon faClass="fa-solid fa-crosshairs" />;
-export const CheckIcon: React.FC = () => <Icon faClass="fa-solid fa-check" />;
+// FIX: Pass props to allow className and define type as SpecificIconProps
+export const CheckIcon: React.FC<SpecificIconProps> = (props) => <Icon faClass="fa-solid fa-check" {...props} />; 
+export const PlusIcon: React.FC<SpecificIconProps> = (props) => <Icon faClass="fa-solid fa-plus" {...props} />;
+export const ArrowsLeftRightIcon: React.FC<SpecificIconProps> = (props) => <Icon faClass="fa-solid fa-arrows-left-right" {...props} />;
+export const ChevronUpIcon: React.FC<SpecificIconProps> = (props) => <Icon faClass="fa-solid fa-chevron-up" {...props} />;
+export const ChevronDownIcon: React.FC<SpecificIconProps> = (props) => <Icon faClass="fa-solid fa-chevron-down" {...props} />;
 
-// Ekspor ulang AIIcon sebagai SparklesIcon untuk kompatibilitas jika diperlukan
-export const SparklesIcon: React.FC = () => <Icon faClass="fa-solid fa-wand-magic-sparkles" />;
+
+// Re-export AIIcon as SparklesIcon for compatibility if needed
+// FIX: Pass props to allow className and define type as SpecificIconProps
+export const SparklesIcon: React.FC<SpecificIconProps> = (props) => <Icon faClass="fa-solid fa-wand-magic-sparkles" {...props} />;

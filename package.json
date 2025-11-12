@@ -15,7 +15,8 @@
     "react-image-crop": "^11.0.6",
     "jspdf": "^2.5.1",
     "jszip": "^3.10.1",
-    "pdfjs-dist": "^5.4.394"
+    "pdfjs-dist": "^5.4.394",
+    "simplex-noise": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

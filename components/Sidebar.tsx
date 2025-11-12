@@ -21,8 +21,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTool, setActiveTool, isS
     setIsSidebarOpen(false);
   }
 
-  const mainTools = TOOLS.filter(tool => tool.name !== 'API Key Settings');
+  const utilityToolNames = ['API Key Settings', 'FAQ'];
+  const mainTools = TOOLS.filter(tool => !utilityToolNames.includes(tool.name));
+  const faqTool = TOOLS.find(tool => tool.name === 'FAQ');
   const settingsTool = TOOLS.find(tool => tool.name === 'API Key Settings');
+
 
   const ToolButton: React.FC<{ tool: Tool }> = ({ tool }) => (
     <button
@@ -69,13 +72,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTool, setActiveTool, isS
             <h1 className="text-xl font-bold text-white tracking-tight">Toolbox Pro</h1>
           </div>
           <div className="lg:hidden">
-            <div
+            {/* FIX: XMarkIcon now correctly accepts className as its only prop, resolving the 'faClass missing' error */}
+            <XMarkIcon
               className="p-2.5 text-gray-400"
               onClick={(e) => { e.stopPropagation(); setIsSidebarOpen(false); }}
             >
               <span className="sr-only">Close sidebar</span>
-              <XMarkIcon />
-            </div>
+            </XMarkIcon>
           </div>
         </button>
         <nav className="flex-1 flex flex-col px-4 py-6 overflow-y-auto">
@@ -85,11 +88,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTool, setActiveTool, isS
             ))}
           </div>
 
-          {settingsTool && (
-            <div className="mt-auto pt-6 border-t border-gray-700/60">
-              <ToolButton tool={settingsTool} />
-            </div>
-          )}
+          <div className="mt-auto pt-6 border-t border-gray-700/60 space-y-1.5">
+            {faqTool && <ToolButton tool={faqTool} />}
+            {settingsTool && <ToolButton tool={settingsTool} />}
+          </div>
         </nav>
       </aside>
     </>

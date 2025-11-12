@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from './Button';
 import { XMarkIcon } from './icons';
@@ -32,7 +33,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors"
           aria-label="Close settings"
         >
-          <XMarkIcon />
+          {/* FIX: XMarkIcon now correctly accepts className as its only prop, resolving the 'faClass missing' error */}
+          <XMarkIcon className="w-5 h-5" />
         </button>
 
         <h2 className="text-2xl font-bold text-white">API Key Settings</h2>

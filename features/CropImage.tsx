@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { Button } from '../components/Button';
@@ -216,7 +217,8 @@ const CropImage: React.FC = () => {
             onClick={handleClearCrop} 
             variant="secondary" 
             disabled={!imageFile || !crop} 
-            icon={<XMarkIcon />}
+            // FIX: XMarkIcon now correctly accepts className as its only prop, resolving the 'faClass missing' error
+            icon={<XMarkIcon className="w-5 h-5" />}
             className="w-full"
           >
             Clear Crop Selection

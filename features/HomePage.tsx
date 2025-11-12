@@ -16,7 +16,7 @@ const HomePage: React.FC<HomePageProps> = ({ setActiveTool }) => {
           Image Toolbox Pro
         </h1>
         <p className="mt-4 max-w-2xl mx-auto text-lg text-gray-400">
-          Semua kebutuhan pemrosesan gambar Anda di satu tempat. Pilih alat di bawah ini untuk memulai.
+          All your image processing needs in one place. Select a tool below to get started.
         </p>
       </div>
 

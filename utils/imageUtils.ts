@@ -32,6 +32,31 @@ export const fileToDataURL = (file: File): Promise<string> => {
   });
 };
 
+export const loadImageAsDataURLAndDimensions = (file: File): Promise<{ dataUrl: string; width: number; height: number; }> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (typeof reader.result === 'string') {
+        const img = new Image();
+        img.src = reader.result;
+        img.onload = () => {
+          resolve({
+            dataUrl: reader.result as string,
+            width: img.naturalWidth,
+            height: img.naturalHeight,
+          });
+        };
+        img.onerror = (error) => reject(error);
+      } else {
+        reject(new Error('Failed to read file as data URL.'));
+      }
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};
+
+
 export const downloadImage = (dataUrl: string, filename: string) => {
     const link = document.createElement('a');
     link.href = dataUrl;

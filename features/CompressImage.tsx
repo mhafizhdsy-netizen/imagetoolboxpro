@@ -1,84 +1,113 @@
 import React, { useState, useCallback } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { Button } from '../components/Button';
-import { downloadImage, dataURLToBlob } from '../utils/imageUtils';
-import { ArrowDownTrayIcon, ArrowUturnLeftIcon, CompressIcon } from '../components/icons';
+import { downloadZip, dataURLToBlob, loadImageAsDataURLAndDimensions } from '../utils/imageUtils';
+import { ArrowDownTrayIcon, ArrowUturnLeftIcon, CompressIcon, XMarkIcon, PlusIcon } from '../components/icons';
+import type { FileWithPreview } from '../types';
 
 type TargetFormat = 'jpeg' | 'webp' | 'png';
 
+interface CompressedResult {
+  id: string;
+  originalFilename: string;
+  dataUrl: string;
+  originalSize: number;
+  compressedSize: number;
+}
+
 const CompressImage: React.FC = () => {
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [compressedUrl, setCompressedUrl] = useState<string | null>(null);
+  const [imageFiles, setImageFiles] = useState<FileWithPreview[]>([]);
+  const [compressedResults, setCompressedResults] = useState<CompressedResult[]>([]);
   const [quality, setQuality] = useState(0.8);
   const [targetFormat, setTargetFormat] = useState<TargetFormat>('jpeg');
-  const [isCompressing, setIsCompressing] = useState(false);
-  const [originalSize, setOriginalSize] = useState(0);
-  const [compressedSize, setCompressedSize] = useState(0);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [progress, setProgress] = useState(0);
 
-  const handleImageUpload = (files: File[]) => {
-    if (files.length > 0) {
-      const file = files[0];
-      setImageFile(file);
-      setImageUrl(URL.createObjectURL(file));
-      setOriginalSize(file.size);
-      if (file.type === 'image/png') {
-        setTargetFormat('png');
-      } else {
-        setTargetFormat('jpeg');
+  const handleImageUpload = async (files: File[]) => {
+    const newFiles: FileWithPreview[] = [];
+    for (const file of files) {
+      try {
+        const { dataUrl } = await loadImageAsDataURLAndDimensions(file);
+        newFiles.push(Object.assign(file, {
+          preview: dataUrl,
+          id: `${file.name}-${file.lastModified}-${Math.random()}`,
+        }));
+      } catch (error) {
+        console.error("Failed to load image preview:", error);
       }
-      setCompressedUrl(null);
-      setCompressedSize(0);
     }
+    setImageFiles(prev => [...prev, ...newFiles]);
+    setCompressedResults([]);
   };
   
-  const performCompression = useCallback(() => {
-    if (!imageUrl) return;
-    
-    setIsCompressing(true);
-    setCompressedUrl(null);
-    
-    const img = new Image();
-    img.src = imageUrl;
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-          setIsCompressing(false);
-          return;
-      }
-      canvas.width = img.width;
-      canvas.height = img.height;
-      ctx.drawImage(img, 0, 0);
-      
-      const mimeType = `image/${targetFormat}`;
-      const dataUrl = canvas.toDataURL(mimeType, quality);
-      setCompressedUrl(dataUrl);
-      
-      const blob = dataURLToBlob(dataUrl);
-      setCompressedSize(blob.size);
-      setIsCompressing(false);
-    };
-    img.onerror = () => {
-        setIsCompressing(false);
-        alert('Failed to load image for compression.');
-    }
-  }, [imageUrl, quality, targetFormat]);
+  const performCompression = useCallback(async () => {
+    if (imageFiles.length === 0) return;
 
-  const handleDownload = () => {
-    if (!compressedUrl || !imageFile) return;
-    const originalName = imageFile.name.substring(0, imageFile.name.lastIndexOf('.'));
-    const filename = `compressed_${originalName}.${targetFormat}`;
-    downloadImage(compressedUrl, filename);
+    setIsProcessing(true);
+    setCompressedResults([]);
+    setProgress(0);
+
+    const results: CompressedResult[] = [];
+    for (let i = 0; i < imageFiles.length; i++) {
+        const file = imageFiles[i];
+        const img = new Image();
+        img.src = file.preview;
+        
+        await new Promise(resolve => { img.onload = resolve; });
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) continue;
+        
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        ctx.drawImage(img, 0, 0);
+        
+        const mimeType = `image/${targetFormat}`;
+        const dataUrl = canvas.toDataURL(mimeType, quality);
+        const blob = dataURLToBlob(dataUrl);
+        
+        results.push({
+            id: file.id,
+            originalFilename: file.name,
+            dataUrl,
+            originalSize: file.size,
+            compressedSize: blob.size,
+        });
+        
+        setProgress(((i + 1) / imageFiles.length) * 100);
+    }
+
+    setCompressedResults(results);
+    setIsProcessing(false);
+  }, [imageFiles, quality, targetFormat]);
+  
+  const handleDownload = async () => {
+    if (compressedResults.length === 0) return;
+    const filesToZip = compressedResults.map(result => {
+        const originalName = result.originalFilename.substring(0, result.originalFilename.lastIndexOf('.'));
+        return {
+            dataUrl: result.dataUrl,
+            filename: `compressed_${originalName}.${targetFormat}`
+        };
+    });
+    await downloadZip(filesToZip, 'compressed_images.zip');
   };
   
+  const handleRemoveImage = (idToRemove: string) => {
+    setImageFiles(prev => prev.filter(file => file.id !== idToRemove));
+    setCompressedResults([]);
+  };
+
   const handleReset = () => {
-      setImageFile(null);
-      setImageUrl(null);
-      setCompressedUrl(null);
-      setOriginalSize(0);
-      setCompressedSize(0);
-  }
+      setImageFiles([]);
+      setCompressedResults([]);
+      setIsProcessing(false);
+      setProgress(0);
+  };
+  
+  const totalOriginalSize = compressedResults.reduce((acc, r) => acc + r.originalSize, 0);
+  const totalCompressedSize = compressedResults.reduce((acc, r) => acc + r.compressedSize, 0);
   
   const formatBytes = (bytes: number, decimals = 2) => {
     if (bytes === 0) return '0 Bytes';
@@ -87,15 +116,22 @@ const CompressImage: React.FC = () => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-  }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+        handleImageUpload(Array.from(e.target.files));
+    }
+  };
 
   return (
-    <div className="space-y-8">
-      <div className="bg-gray-800 rounded-lg p-6 space-y-6 border border-gray-700">
-          <h3 className="text-lg font-semibold text-white">Compression Settings</h3>
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="lg:col-span-4 space-y-6">
+        <div className="bg-gray-800 rounded-lg p-6 space-y-6 border border-gray-700">
+            <h3 className="text-lg font-semibold text-white">Compression Settings</h3>
             <div>
               <label htmlFor="format-select" className="block text-sm font-medium text-gray-300 mb-2">Output Format</label>
-              <select id="format-select" value={targetFormat} onChange={e => setTargetFormat(e.target.value as TargetFormat)} className="custom-input" disabled={!imageFile}>
+              <select id="format-select" value={targetFormat} onChange={e => setTargetFormat(e.target.value as TargetFormat)} className="custom-input" disabled={imageFiles.length === 0}>
                   <option value="jpeg">JPG</option>
                   <option value="webp">WEBP</option>
                   <option value="png">PNG</option>
@@ -117,39 +153,64 @@ const CompressImage: React.FC = () => {
                   onChange={(e) => setQuality(parseFloat(e.target.value))}
                   className="w-full range-slider"
                   aria-label="Compression Quality"
-                  disabled={!imageFile}
+                  disabled={imageFiles.length === 0}
               />
           </div>
-          {compressedSize > 0 && (
+          {compressedResults.length > 0 && (
               <div className="text-sm text-gray-400 space-y-1 pt-4 border-t border-gray-700">
-                  <p>Original Size: <span className="font-semibold text-gray-200">{formatBytes(originalSize)}</span></p>
-                  <p>Compressed Size: <span className="font-semibold text-gray-200">{formatBytes(compressedSize)}</span></p>
-                  <p>Reduction: <span className={`font-semibold ${originalSize > compressedSize ? 'text-green-400' : 'text-red-400'}`}>{(((originalSize - compressedSize) / originalSize) * 100).toFixed(1)}%</span></p>
+                  <p>Total Original Size: <span className="font-semibold text-gray-200">{formatBytes(totalOriginalSize)}</span></p>
+                  <p>Total Compressed Size: <span className="font-semibold text-gray-200">{formatBytes(totalCompressedSize)}</span></p>
+                  <p>Total Reduction: <span className={`font-semibold ${totalOriginalSize > totalCompressedSize ? 'text-green-400' : 'text-red-400'}`}>{(((totalOriginalSize - totalCompressedSize) / totalOriginalSize) * 100).toFixed(1)}%</span></p>
               </div>
           )}
-      </div>
-      
-      <div className="flex flex-col gap-4">
-        <Button onClick={performCompression} isLoading={isCompressing} icon={<CompressIcon />} disabled={!imageFile}>
-          Compress Image
+        </div>
+        <div className="flex flex-col gap-4">
+            <Button onClick={performCompression} isLoading={isProcessing} icon={<CompressIcon />} disabled={imageFiles.length === 0}>
+                {isProcessing ? `Compressing... (${Math.round(progress)}%)` : `Compress All (${imageFiles.length})`}
+            </Button>
+            <Button onClick={handleDownload} variant="secondary" disabled={compressedResults.length === 0} icon={<ArrowDownTrayIcon />}>
+                Download All as ZIP
+            </Button>
+        </div>
+        <Button onClick={handleReset} variant="outline" icon={<ArrowUturnLeftIcon />} disabled={imageFiles.length === 0}>
+            Start Over
         </Button>
-        <Button onClick={handleDownload} variant="secondary" disabled={!compressedUrl} icon={<ArrowDownTrayIcon />}>
-          Download Compressed Image
-        </Button>
       </div>
-        <Button onClick={handleReset} variant="outline" icon={<ArrowUturnLeftIcon />} disabled={!imageFile}>
-          Start Over
-      </Button>
-      
-      <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-          <h3 className="text-lg font-semibold text-white mb-4">Preview</h3>
-          <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] overflow-hidden">
-            {!imageFile ? (
-              <ImageUploader onFileSelect={handleImageUpload} multiple={false} accept="image/*" title="Upload an image to compress"/>
+      <div className="lg:col-span-8">
+        <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 sticky top-24">
+            <h3 className="text-lg font-semibold text-white mb-4 px-2">Image Queue</h3>
+            {imageFiles.length === 0 ? (
+                <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh]">
+                    <ImageUploader onFileSelect={handleImageUpload} multiple={true} accept="image/*" title="Upload images to compress"/>
+                </div>
             ) : (
-              <img src={compressedUrl ?? imageUrl ?? ''} alt="Preview" className="max-w-full object-contain rounded-md"/>
+                <div className="space-y-4">
+                     {isProcessing && (
+                        <div className="w-full bg-gray-700 rounded-full h-2.5">
+                            <div className="bg-teal-500 h-2.5 rounded-full" style={{ width: `${progress}%`, transition: 'width 0.2s ease-in-out' }}></div>
+                        </div>
+                    )}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-2 min-h-[40vh] bg-gray-900/50 rounded-lg max-h-[70vh] overflow-y-auto">
+                       {imageFiles.map((file, index) => (
+                           <div key={file.id} className="relative group aspect-square w-full overflow-hidden rounded-lg border-2 border-gray-700">
+                               <img src={file.preview} alt={file.name} className="object-cover w-full h-full"/>
+                               <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                   <span className="text-white text-xs text-center p-1 truncate">{file.name}</span>
+                               </div>
+                               <button onClick={() => handleRemoveImage(file.id)} className="absolute top-1 right-1 p-1 bg-red-600/70 text-white rounded-full hover:bg-red-700 transition-colors opacity-0 group-hover:opacity-100">
+                                   <XMarkIcon className="w-4 h-4" />
+                               </button>
+                           </div>
+                       ))}
+                        <label htmlFor="add-more-files-input" className="group flex flex-col items-center justify-center text-center p-2 aspect-square rounded-lg border-2 border-dashed border-gray-600 bg-gray-800/50 text-gray-400 transition-colors hover:border-teal-500 hover:text-teal-400 cursor-pointer">
+                            <PlusIcon className="w-8 h-8" />
+                            <span className="mt-2 text-sm font-semibold">Add More</span>
+                            <input id="add-more-files-input" type="file" className="sr-only" accept="image/*" multiple onChange={handleFileChange} />
+                        </label>
+                    </div>
+                </div>
             )}
-          </div>
+        </div>
       </div>
     </div>
   );

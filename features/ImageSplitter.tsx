@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { Button } from '../components/Button';
@@ -438,9 +439,11 @@ const ImageSplitter: React.FC = () => {
                             R{img.row + 1}C{img.col + 1}
                           </span>
                           <div className="absolute top-2 right-2">
+                            {/* FIX: CheckIcon now correctly accepts className */}
                             {selectedImages.has(img.id) ? (
                               <CheckIcon className="w-5 h-5 text-teal-400 bg-black/70 rounded-full p-0.5" />
                             ) : (
+                              // FIX: XMarkIcon now correctly accepts className
                               <XMarkIcon className="w-5 h-5 text-gray-400 bg-black/70 rounded-full p-0.5 opacity-0 group-hover:opacity-100" />
                             )}
                           </div>

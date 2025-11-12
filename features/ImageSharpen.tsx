@@ -4,6 +4,7 @@ import { Button } from '../components/Button';
 import { downloadImage } from '../utils/imageUtils';
 import { upscaleImageWithAI } from '../services/backgroundRemovalService';
 import { SharpenIcon, ArrowDownTrayIcon, ArrowUturnLeftIcon } from '../components/icons';
+import { ImageComparator } from '../components/ImageComparator';
 
 const ImageSharpen: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -105,21 +106,17 @@ const ImageSharpen: React.FC = () => {
                       <img src={upscaledUrl ?? imageUrl ?? ''} alt="Preview" className="max-w-full object-contain rounded-md" />
                     </div>
                 ) : (
-                    <div className="grid grid-cols-2 gap-2">
-                        <div>
-                            <h4 className="text-center text-sm font-semibold mb-2 text-gray-300">Original</h4>
-                            <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[25rem]">
-                                <img src={imageUrl ?? ''} alt="Original" className="max-w-full max-h-full object-contain rounded-md" />
-                            </div>
-                        </div>
-                        <div>
-                            <h4 className="text-center text-sm font-semibold mb-2 text-gray-300">Sharpened</h4>
-                            <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[25rem] relative">
-                                {isLoading && <LoadingSpinner />}
-                                <img src={upscaledUrl ?? ''} alt="Sharpened" className="max-w-full max-h-full object-contain rounded-md" />
-                            </div>
-                        </div>
-                    </div>
+                  <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] relative">
+                    {isLoading && <LoadingSpinner />}
+                    {!isLoading && upscaledUrl && imageUrl && (
+                      <ImageComparator 
+                        beforeSrc={imageUrl} 
+                        afterSrc={upscaledUrl}
+                        beforeLabel='Original'
+                        afterLabel='Sharpened'
+                      />
+                    )}
+                  </div>
                 )}
                 {upscaledUrl && !isLoading && (
                     <div className="mt-4 p-3 bg-teal-500/10 border border-teal-500/20 rounded-lg text-center">

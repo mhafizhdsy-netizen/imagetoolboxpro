@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import { useSettings } from '../contexts/SettingsContext';
 import { Button } from '../components/Button';
@@ -48,7 +49,7 @@ const ApiKeyManager: React.FC = () => {
                 placeholder={placeholder}
                 className="custom-input"
             />
-            <p className="text-xs text-gray-500 mt-2">Dapatkan kunci gratis Anda dari <a href={link} target="_blank" rel="noopener noreferrer" className="underline hover:text-teal-400">{linkText}</a>.</p>
+            <p className="text-xs text-gray-500 mt-2">Get your free key from <a href={link} target="_blank" rel="noopener noreferrer" className="underline hover:text-teal-400">{linkText}</a>.</p>
         </div>
     </div>
   );
@@ -57,28 +58,28 @@ const ApiKeyManager: React.FC = () => {
     <div className="max-w-4xl mx-auto space-y-8">
        <div className="text-center">
         <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
-          Pengaturan Kunci API
+          API Key Settings
         </h2>
         <p className="mt-4 text-lg leading-8 text-gray-400">
-          Kelola kunci untuk fitur AI. Kunci disimpan secara lokal di browser Anda. Kunci Google Gemini dikonfigurasi secara terpusat.
+          Manage keys for AI features. Keys are stored locally in your browser. The Google Gemini key is configured centrally.
         </p>
       </div>
 
       <div className="space-y-6">
         {/* FIX: Removed ApiCard for Google Gemini to comply with API key guidelines. */}
         <ApiCard
-          title="Kunci RapidAPI"
-          description="Satu kunci untuk: Penghapus Latar Belakang, Peningkat Skala, Penajam Gambar & Pemburaman Wajah."
+          title="RapidAPI Key"
+          description="One key for: Background Remover, Upscaler, Image Sharpening & Face Blur."
           link="https://rapidapi.com/hub"
           linkText="RapidAPI Hub"
           value={localRapidApiKey}
           onChange={(e: any) => setLocalRapidApiKey(e.target.value)}
-          placeholder="Masukkan kunci RapidAPI Anda"
+          placeholder="Enter your RapidAPI key"
         />
         
         <div className="flex justify-end pt-4">
             <Button onClick={handleSave} isLoading={saveStatus === 'saving'}>
-                {saveStatus === 'saved' ? <><CheckIcon /> Tersimpan!</> : 'Simpan Semua Pengaturan'}
+                {saveStatus === 'saved' ? <><CheckIcon className="mr-2 -ml-1 h-5 w-5" /> Saved!</> : 'Save All Settings'}
             </Button>
         </div>
       </div>

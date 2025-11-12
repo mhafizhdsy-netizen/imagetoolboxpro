@@ -105,28 +105,28 @@ const MemeGenerator: React.FC = () => {
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-4 space-y-6">
         <div className="bg-gray-800 rounded-lg p-6 space-y-6 border border-gray-700">
-            <h3 className="text-lg font-semibold text-white">Sesuaikan Meme Anda</h3>
+            <h3 className="text-lg font-semibold text-white">Customize Your Meme</h3>
             <div className="space-y-4">
               <div>
-                <label htmlFor="top-text" className="block text-sm font-medium text-gray-300 mb-2">Teks Atas</label>
+                <label htmlFor="top-text" className="block text-sm font-medium text-gray-300 mb-2">Top Text</label>
                 <input type="text" id="top-text" value={topText} onChange={(e) => setTopText(e.target.value)} className="custom-input" disabled={!imageFile}/>
               </div>
               <div>
-                <label htmlFor="bottom-text" className="block text-sm font-medium text-gray-300 mb-2">Teks Bawah</label>
+                <label htmlFor="bottom-text" className="block text-sm font-medium text-gray-300 mb-2">Bottom Text</label>
                 <input type="text" id="bottom-text" value={bottomText} onChange={(e) => setBottomText(e.target.value)} className="custom-input" disabled={!imageFile}/>
               </div>
             </div>
             <div className="flex flex-col gap-4 pt-4 border-t border-gray-700">
                 <Button icon={<AIIcon />} onClick={handleGenerateCaption} isLoading={isLoading} disabled={!imageFile}>
-                    Buat dengan AI
+                    Generate with AI
                 </Button>
                 <Button icon={<ArrowDownTrayIcon />} onClick={handleDownload} variant="secondary" disabled={!memeDataUrl}>
-                    Unduh Meme
+                    Download Meme
                 </Button>
             </div>
         </div>
          <Button icon={<ArrowUturnLeftIcon />} onClick={handleReset} variant="outline" disabled={!imageFile}>
-            Mulai Ulang
+            Start Over
         </Button>
       </div>
       <div className="lg:col-span-8">
@@ -141,7 +141,7 @@ const MemeGenerator: React.FC = () => {
                         <img src={memeDataUrl} alt="Meme preview" className="max-w-full object-contain rounded-md" />
                     ) : (
                         <div className="w-full h-full bg-gray-700 flex items-center justify-center rounded-md">
-                            <p className="text-gray-400">Memuat Pratinjau...</p>
+                            <p className="text-gray-400">Loading Preview...</p>
                         </div>
                     )}
                      <canvas ref={canvasRef} className="hidden"></canvas>

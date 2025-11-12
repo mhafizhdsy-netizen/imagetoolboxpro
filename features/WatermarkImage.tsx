@@ -1,8 +1,10 @@
+
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { Button } from '../components/Button';
 import { downloadImage } from '../utils/imageUtils';
-import { ArrowDownTrayIcon, ArrowUturnLeftIcon, WatermarkIcon, PhotoIcon, DocumentIconNoFw } from '../components/icons'; // Using DocumentIconNoFw
+import { ArrowDownTrayIcon, ArrowUturnLeftIcon, WatermarkIcon, PhotoIcon, DocumentIconNoFw } from '../components/icons';
+import { ColorPicker } from '../components/ColorPicker'; // Import the new ColorPicker
 
 const WatermarkImage: React.FC = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -263,10 +265,12 @@ const WatermarkImage: React.FC = () => {
                             <label htmlFor="watermark-text" className="block text-sm font-medium text-gray-300 mb-2">Watermark Text</label>
                             <input type="text" id="watermark-text" value={text} onChange={(e) => setText(e.target.value)} className="custom-input" disabled={!imageFile}/>
                         </div>
-                        <div>
-                            <label htmlFor="color-picker" className="block text-sm font-medium text-gray-300 mb-2">Color</label>
-                            <input type="color" id="color-picker" value={color} onChange={(e) => setColor(e.target.value)} className="w-full h-10 p-1 bg-gray-700 border border-gray-600 rounded-md cursor-pointer" disabled={!imageFile}/>
-                        </div>
+                        <ColorPicker
+                          label="Color"
+                          color={color}
+                          onChange={setColor}
+                          disabled={!imageFile}
+                        />
                     </>
                 ) : ( // watermarkType === 'image'
                     <div>

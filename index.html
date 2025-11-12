@@ -22,7 +22,8 @@
     "pdfjs-dist/build/pdf": "https://aistudiocdn.com/pdfjs-dist@^4.4.168/build/pdf.min.mjs",
     "pdfjs-dist/build/pdf.worker": "https://aistudiocdn.com/pdfjs-dist@^4.4.168/build/pdf.worker.min.mjs",
     "jszip": "https://aistudiocdn.com/jszip@^3.10.1",
-    "pdfjs-dist/": "https://aistudiocdn.com/pdfjs-dist@^5.4.394/"
+    "pdfjs-dist/": "https://aistudiocdn.com/pdfjs-dist@^5.4.394/",
+    "simplex-noise": "https://aistudiocdn.com/simplex-noise@^4.0.1"
   }
 }
 </script>
@@ -139,6 +140,55 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
+  }
+
+  /* Custom Color Picker Styles */
+  @keyframes popover-enter {
+    0% {
+      opacity: 0;
+      transform: scale(0.95) translateY(-5px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  .color-picker-popover {
+    animation: popover-enter 150ms ease-out forwards;
+  }
+
+  .color-picker-hue-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 10px; /* Thinner */
+    background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .color-picker-hue-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid #6b7280; /* gray-500 */
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .color-picker-hue-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid #6b7280;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
   }
 </style>
 </head>
