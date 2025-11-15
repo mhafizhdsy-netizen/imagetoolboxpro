@@ -1,0 +1,13 @@
+{
+  "name": "aninemo-website",
+  "version": "1.0.0",
+  "description": "Aninemo Website project",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mhafizhdsy-netizen/imagetoolboxpro.git"
+  },
+  "author": "mhafizhdsy-netizen",
+  "license": "ISC"
+}
