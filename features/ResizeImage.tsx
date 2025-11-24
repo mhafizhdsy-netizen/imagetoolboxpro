@@ -210,12 +210,12 @@ export const ResizeImage: React.FC = () => {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-4 space-y-6">
-                <div className="bg-gray-800 rounded-lg p-6 space-y-6 border border-gray-700">
+                <div className="bg-zinc-900 rounded-lg p-6 space-y-6 border border-zinc-800">
                     <h3 className="text-lg font-semibold text-white">Global Settings</h3>
                     <div>
                         <label htmlFor="global-scale-slider" className="flex justify-between text-sm font-medium text-gray-300 mb-2">
                             <span>Resize by Percentage</span>
-                            <span className="font-mono text-teal-300 text-lg">{globalPercentage}%</span>
+                            <span className="font-mono text-[#1DB954] text-lg">{globalPercentage}%</span>
                         </label>
                         <input
                             type="range"
@@ -245,37 +245,37 @@ export const ResizeImage: React.FC = () => {
                 </Button>
             </div>
             <div className="lg:col-span-8">
-                <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 sticky top-24">
+                <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 sticky top-24">
                     <div className="flex justify-between items-center mb-4 px-2">
                         <h3 className="text-lg font-semibold text-white">Image Queue</h3>
                         {imageFiles.length > 0 && (
                             <div className="flex gap-2">
-                                <Button onClick={handleExpandAll} variant="outline" className="px-3 py-1 text-xs">Expand All</Button>
-                                <Button onClick={handleCollapseAll} variant="outline" className="px-3 py-1 text-xs">Collapse All</Button>
+                                <Button onClick={handleExpandAll} variant="outline" className="px-3 py-1 text-xs !rounded-md">Expand All</Button>
+                                <Button onClick={handleCollapseAll} variant="outline" className="px-3 py-1 text-xs !rounded-md">Collapse All</Button>
                             </div>
                         )}
                     </div>
                     
                     {imageFiles.length === 0 ? (
-                        <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh]">
+                        <div className="bg-black/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh]">
                             <ImageUploader onFileSelect={handleImageUpload} multiple={true} accept="image/*" />
                         </div>
                     ) : (
                         <div className="space-y-4">
                              {isProcessing && (
-                                <div className="w-full bg-gray-700 rounded-full h-2.5">
-                                    <div className="bg-teal-500 h-2.5 rounded-full" style={{ width: `${progress}%`, transition: 'width 0.2s ease-in-out' }}></div>
+                                <div className="w-full bg-zinc-700 rounded-full h-2.5">
+                                    <div className="bg-[#1DB954] h-2.5 rounded-full" style={{ width: `${progress}%`, transition: 'width 0.2s ease-in-out' }}></div>
                                 </div>
                             )}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2 bg-gray-900/50 rounded-lg max-h-[70vh] overflow-y-auto">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-2 bg-black/50 rounded-lg max-h-[70vh] overflow-y-auto">
                                {imageFiles.map((file) => {
                                    const setting = resizeSettings.find(s => s.id === file.id);
                                    const result = resizedResults.find(r => r.id === file.id);
                                    if (!setting) return null;
                                    const isExpanded = expandedIds.has(file.id);
                                    return (
-                                       <div key={file.id} className="bg-gray-800/50 p-4 rounded-lg border border-gray-700 space-y-4">
-                                           <div className="relative group aspect-video w-full overflow-hidden rounded-lg bg-gray-900">
+                                       <div key={file.id} className="bg-zinc-800/50 p-4 rounded-lg border border-zinc-700 space-y-4">
+                                           <div className="relative group aspect-video w-full overflow-hidden rounded-lg bg-black">
                                                <img src={result?.dataUrl || file.preview} alt={file.name} className="object-contain w-full h-full"/>
                                                <button onClick={() => handleRemoveImage(file.id)} className="absolute top-2 right-2 p-1 bg-red-600/70 text-white rounded-full hover:bg-red-700 transition-colors opacity-0 group-hover:opacity-100 z-10">
                                                    <XMarkIcon className="w-4 h-4" />
@@ -291,11 +291,11 @@ export const ResizeImage: React.FC = () => {
                                                     {isExpanded ? <ChevronUpIcon className="w-5 h-5"/> : <ChevronDownIcon className="w-5 h-5"/>}
                                                 </button>
                                            </div>
-                                           <div className={`transition-all duration-300 ease-in-out overflow-hidden space-y-4 ${isExpanded ? 'max-h-[500px] opacity-100 pt-4 border-t border-gray-700' : 'max-h-0 opacity-0'}`}>
+                                           <div className={`transition-all duration-300 ease-in-out overflow-hidden space-y-4 ${isExpanded ? 'max-h-[500px] opacity-100 pt-4 border-t border-zinc-700' : 'max-h-0 opacity-0'}`}>
                                                <div>
                                                     <label htmlFor={`scale-${file.id}`} className="flex justify-between text-sm font-medium text-gray-300 mb-2">
                                                         <span>Scale</span>
-                                                        <span className="font-mono text-teal-300">{setting.percentage}%</span>
+                                                        <span className="font-mono text-[#1DB954]">{setting.percentage}%</span>
                                                     </label>
                                                     <input
                                                         type="range"
@@ -318,14 +318,14 @@ export const ResizeImage: React.FC = () => {
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center">
-                                                    <input id={`aspect-ratio-${file.id}`} type="checkbox" checked={setting.keepAspectRatio} onChange={(e) => handlePerImageSettingChange(file.id, { keepAspectRatio: e.target.checked })} className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-teal-500 focus:ring-teal-500"/>
+                                                    <input id={`aspect-ratio-${file.id}`} type="checkbox" checked={setting.keepAspectRatio} onChange={(e) => handlePerImageSettingChange(file.id, { keepAspectRatio: e.target.checked })} className="h-4 w-4 rounded border-zinc-600 bg-zinc-700 text-[#1DB954] focus:ring-[#1DB954]"/>
                                                     <label htmlFor={`aspect-ratio-${file.id}`} className="ml-3 block text-sm font-medium text-gray-300">Keep aspect ratio</label>
                                                 </div>
                                            </div>
                                        </div>
                                    );
                                })}
-                                <label htmlFor="add-more-files-input" className="group flex flex-col items-center justify-center text-center p-4 min-h-[200px] rounded-lg border-2 border-dashed border-gray-600 bg-gray-800/50 text-gray-400 transition-colors hover:border-teal-500 hover:text-teal-400 cursor-pointer">
+                                <label htmlFor="add-more-files-input" className="group flex flex-col items-center justify-center text-center p-4 min-h-[200px] rounded-lg border-2 border-dashed border-zinc-700 bg-zinc-800/50 text-gray-400 transition-colors hover:border-[#1DB954] hover:text-[#1DB954] cursor-pointer">
                                     <PlusIcon className="w-8 h-8" />
                                     <span className="mt-2 text-sm font-semibold">Add More</span>
                                     <input id="add-more-files-input" type="file" className="sr-only" accept="image/*" multiple onChange={handleFileChange} />

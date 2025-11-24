@@ -45,7 +45,7 @@ const AITextGenerator: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
-      <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 space-y-4">
+      <div className="bg-zinc-900 p-6 rounded-lg border border-zinc-800 space-y-4">
         <h2 className="text-lg font-semibold text-white">
           AI Text Generator
         </h2>
@@ -83,7 +83,7 @@ const AITextGenerator: React.FC = () => {
       )}
 
       {isLoading && !result && (
-          <div className="flex justify-center items-center p-8 text-gray-400 bg-gray-800 rounded-lg border border-gray-700">
+          <div className="flex justify-center items-center p-8 text-gray-400 bg-zinc-900 rounded-lg border border-zinc-800">
               <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -93,12 +93,12 @@ const AITextGenerator: React.FC = () => {
       )}
 
       {result && (
-        <div className="bg-gray-800 rounded-lg border border-gray-700">
+        <div className="bg-zinc-900 rounded-lg border border-zinc-800">
             <div className="p-6">
                 <h3 className="text-lg font-semibold text-white">Generated Result</h3>
             </div>
-            <div className="p-6 border-t border-gray-700 bg-gray-900/50 rounded-b-lg">
-                <div className="text-gray-200 whitespace-pre-wrap leading-relaxed selection:bg-teal-500/30 prose prose-invert max-w-none prose-p:my-2">{result}</div>
+            <div className="p-6 border-t border-zinc-800 bg-black/50 rounded-b-lg">
+                <div className="text-gray-200 whitespace-pre-wrap leading-relaxed selection:bg-[#1DB954]/30 prose prose-invert max-w-none prose-p:my-2">{result}</div>
             </div>
         </div>
       )}

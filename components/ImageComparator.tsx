@@ -99,6 +99,7 @@ export const ImageComparator: React.FC<ImageComparatorProps> = ({
           alt="Before"
           className="absolute top-0 left-0 w-full h-full object-contain pointer-events-none"
           draggable="false"
+          loading="lazy"
         />
       </div>
 
@@ -112,6 +113,7 @@ export const ImageComparator: React.FC<ImageComparatorProps> = ({
           alt="After"
           className="absolute top-0 left-0 w-full h-full object-contain pointer-events-none"
           draggable="false"
+          loading="lazy"
         />
       </div>
 

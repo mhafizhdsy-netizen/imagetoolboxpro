@@ -1,4 +1,5 @@
 
+
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { Button } from '../components/Button';
@@ -402,7 +403,7 @@ const ImageSplitter: React.FC = () => {
 
               {splitImages.length === 0 && !isLoading && (
                 <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] relative">
-                  <img src={imageUrl ?? ''} alt="Original Preview" className="max-w-full object-contain rounded-md" />
+                  <img src={imageUrl ?? ''} alt="Original Preview" className="max-w-full object-contain rounded-md" loading="lazy" />
                 </div>
               )}
 
@@ -433,7 +434,7 @@ const ImageSplitter: React.FC = () => {
                                     ${selectedImages.has(img.id) ? 'border-teal-400 ring-2 ring-teal-400' : 'border-gray-700 hover:border-teal-500/70'}`}
                         onClick={() => handleToggleImageSelection(img.id)}
                       >
-                        <img src={img.dataUrl} alt={img.filename} className="object-cover w-full h-full" />
+                        <img src={img.dataUrl} alt={img.filename} className="object-cover w-full h-full" loading="lazy" />
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                           <span className="text-white text-lg font-bold">
                             R{img.row + 1}C{img.col + 1}

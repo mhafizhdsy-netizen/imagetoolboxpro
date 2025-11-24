@@ -295,6 +295,7 @@ const ImageStitching: React.FC = () => {
                       src={file.preview}
                       alt={`Image ${index + 1}`}
                       className="object-cover w-full h-full"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <span className="text-white text-xl font-bold">{index + 1}</span>
@@ -341,7 +342,7 @@ const ImageStitching: React.FC = () => {
 
               {stitchedImageUrl && !isProcessing ? (
                 <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] relative">
-                  <img src={stitchedImageUrl} alt="Stitched preview" className="max-w-full max-h-[80vh] object-contain rounded-md" />
+                  <img src={stitchedImageUrl} alt="Stitched preview" className="max-w-full max-h-[80vh] object-contain rounded-md" loading="lazy" />
                 </div>
               ) : !isProcessing && imageFiles.length > 0 && (
                 <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] text-gray-400">

@@ -33,12 +33,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTool, setActiveTool, isS
       onClick={() => handleToolClick(tool)}
       className={`w-full flex items-center px-4 py-2.5 text-sm font-medium rounded-md transition-all duration-200 group relative ${
         activeTool?.name === tool.name
-          ? 'bg-gray-700/60 text-white'
-          : 'text-gray-400 hover:bg-gray-700/40 hover:text-white'
+          ? 'bg-zinc-800 text-white'
+          : 'text-gray-400 hover:bg-zinc-800 hover:text-white'
       }`}
     >
       {activeTool?.name === tool.name && (
-        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-teal-400 rounded-r-full"></span>
+        <span className="absolute left-0 top-1/2 -translate-y-1/2 h-6 w-1 bg-[#1DB954] rounded-r-full"></span>
       )}
       <span className="w-6 mr-4 text-center text-lg">{tool.icon}</span>
       <span className="truncate">{tool.name}</span>
@@ -57,16 +57,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTool, setActiveTool, isS
       ></div>
 
       <aside
-        className={`w-64 bg-gray-900/80 backdrop-blur-lg border-r border-gray-700/60 flex flex-col
+        className={`w-64 bg-zinc-950/80 backdrop-blur-lg border-r border-zinc-800/60 flex flex-col
           fixed inset-y-0 left-0 z-30 transform transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0
           ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}
       >
         <button 
           onClick={goToHome}
-          className="flex items-center justify-between h-20 px-4 border-b border-gray-700/60 w-full hover:bg-gray-800 transition-colors"
+          className="flex items-center justify-between h-20 px-4 border-b border-zinc-800/60 w-full hover:bg-zinc-900 transition-colors"
         >
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-teal-500/20 rounded-lg text-2xl text-teal-300">
+            <div className="w-10 h-10">
                 <AppIcon />
             </div>
             <h1 className="text-xl font-bold text-white tracking-tight">Toolbox Pro</h1>
@@ -88,7 +88,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTool, setActiveTool, isS
             ))}
           </div>
 
-          <div className="mt-auto pt-6 border-t border-gray-700/60 space-y-1.5">
+          <div className="mt-auto pt-6 border-t border-zinc-800/60 space-y-1.5">
             {faqTool && <ToolButton tool={faqTool} />}
             {settingsTool && <ToolButton tool={settingsTool} />}
           </div>

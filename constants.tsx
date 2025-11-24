@@ -21,6 +21,7 @@ import {
   CollageIcon, // New Import for Collage Icon
   StitchIcon, // New Import for Stitch Icon
   QuestionMarkCircleIcon, // New Import for FAQ Icon
+  SwatchbookIcon, // New Import for Match Color Icon
 } from './components/icons';
 
 // Import feature components
@@ -39,6 +40,7 @@ import WatermarkImage from './features/WatermarkImage';
 import ImageSharpen from './features/ImageSharpen';
 import ApiKeyManager from './features/ApiKeyManager';
 import ColorFromImage from './features/ColorFromImage';
+import MatchImageColor from './features/MatchImageColor'; // New import for MatchImageColor
 import HtmlToImage from './features/HtmlToImage';
 import ImageToPdf from './features/ImageToPdf'; // New import for ImageToPdf
 import PdfToImage from './features/PdfToImage'; // New import for PdfToImage
@@ -67,6 +69,7 @@ export const TOOLS: Tool[] = [
   // { name: 'Blur Faces', icon: <BlurIcon />, component: BlurFace, description: 'Automatically detect and blur faces to protect privacy.' }, // Removed
   { name: 'Watermark Image', icon: <WatermarkIcon />, component: WatermarkImage, description: 'Add custom text or a logo as a watermark to your images.' },
   { name: 'Pick Color From Image', icon: <ColorSwatchIcon />, component: ColorFromImage, description: 'Extract the dominant color palette from any image.' }, // Renamed
+  { name: 'Match Image Color', icon: <SwatchbookIcon />, component: MatchImageColor, description: 'Transfer the color palette from a source image to a target image.' }, // New Tool
   // Removed 'Photo Editor' entry
   { name: 'HTML to Image', icon: <DocumentIconSidebar />, component: HtmlToImage, description: 'Convert HTML code snippets into images with AI.' },
   { name: 'Image to PDF', icon: <PdfIcon />, component: ImageToPdf, description: 'Combine multiple images into a single PDF document.' }, // New Tool

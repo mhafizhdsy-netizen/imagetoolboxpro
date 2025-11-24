@@ -127,7 +127,7 @@ const CompressImage: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-4 space-y-6">
-        <div className="bg-gray-800 rounded-lg p-6 space-y-6 border border-gray-700">
+        <div className="bg-zinc-900 rounded-lg p-6 space-y-6 border border-zinc-800">
             <h3 className="text-lg font-semibold text-white">Compression Settings</h3>
             <div>
               <label htmlFor="format-select" className="block text-sm font-medium text-gray-300 mb-2">Output Format</label>
@@ -141,7 +141,7 @@ const CompressImage: React.FC = () => {
           <div>
               <label htmlFor="quality-slider" className="flex justify-between text-sm font-medium text-gray-300 mb-2">
                   <span>Quality / Effort</span>
-                  <span className="font-mono text-teal-300 text-lg">{Math.round(quality * 100)}</span>
+                  <span className="font-mono text-[#1DB954] text-lg">{Math.round(quality * 100)}</span>
               </label>
               <input 
                   type="range" 
@@ -157,7 +157,7 @@ const CompressImage: React.FC = () => {
               />
           </div>
           {compressedResults.length > 0 && (
-              <div className="text-sm text-gray-400 space-y-1 pt-4 border-t border-gray-700">
+              <div className="text-sm text-gray-400 space-y-1 pt-4 border-t border-zinc-800">
                   <p>Total Original Size: <span className="font-semibold text-gray-200">{formatBytes(totalOriginalSize)}</span></p>
                   <p>Total Compressed Size: <span className="font-semibold text-gray-200">{formatBytes(totalCompressedSize)}</span></p>
                   <p>Total Reduction: <span className={`font-semibold ${totalOriginalSize > totalCompressedSize ? 'text-green-400' : 'text-red-400'}`}>{(((totalOriginalSize - totalCompressedSize) / totalOriginalSize) * 100).toFixed(1)}%</span></p>
@@ -177,23 +177,23 @@ const CompressImage: React.FC = () => {
         </Button>
       </div>
       <div className="lg:col-span-8">
-        <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 sticky top-24">
+        <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 sticky top-24">
             <h3 className="text-lg font-semibold text-white mb-4 px-2">Image Queue</h3>
             {imageFiles.length === 0 ? (
-                <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh]">
+                <div className="bg-black/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh]">
                     <ImageUploader onFileSelect={handleImageUpload} multiple={true} accept="image/*" title="Upload images to compress"/>
                 </div>
             ) : (
                 <div className="space-y-4">
                      {isProcessing && (
-                        <div className="w-full bg-gray-700 rounded-full h-2.5">
-                            <div className="bg-teal-500 h-2.5 rounded-full" style={{ width: `${progress}%`, transition: 'width 0.2s ease-in-out' }}></div>
+                        <div className="w-full bg-zinc-700 rounded-full h-2.5">
+                            <div className="bg-[#1DB954] h-2.5 rounded-full" style={{ width: `${progress}%`, transition: 'width 0.2s ease-in-out' }}></div>
                         </div>
                     )}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-2 min-h-[40vh] bg-gray-900/50 rounded-lg max-h-[70vh] overflow-y-auto">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-2 min-h-[40vh] bg-black/50 rounded-lg max-h-[70vh] overflow-y-auto">
                        {imageFiles.map((file, index) => (
-                           <div key={file.id} className="relative group aspect-square w-full overflow-hidden rounded-lg border-2 border-gray-700">
-                               <img src={file.preview} alt={file.name} className="object-cover w-full h-full"/>
+                           <div key={file.id} className="relative group aspect-square w-full overflow-hidden rounded-lg border-2 border-zinc-800">
+                               <img src={file.preview} alt={file.name} className="object-cover w-full h-full" loading="lazy"/>
                                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                    <span className="text-white text-xs text-center p-1 truncate">{file.name}</span>
                                </div>
@@ -202,7 +202,7 @@ const CompressImage: React.FC = () => {
                                </button>
                            </div>
                        ))}
-                        <label htmlFor="add-more-files-input" className="group flex flex-col items-center justify-center text-center p-2 aspect-square rounded-lg border-2 border-dashed border-gray-600 bg-gray-800/50 text-gray-400 transition-colors hover:border-teal-500 hover:text-teal-400 cursor-pointer">
+                        <label htmlFor="add-more-files-input" className="group flex flex-col items-center justify-center text-center p-2 aspect-square rounded-lg border-2 border-dashed border-zinc-700 bg-zinc-800/50 text-gray-400 transition-colors hover:border-[#1DB954] hover:text-[#1DB954] cursor-pointer">
                             <PlusIcon className="w-8 h-8" />
                             <span className="mt-2 text-sm font-semibold">Add More</span>
                             <input id="add-more-files-input" type="file" className="sr-only" accept="image/*" multiple onChange={handleFileChange} />

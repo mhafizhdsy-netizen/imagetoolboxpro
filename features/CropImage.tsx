@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { Button } from '../components/Button';
@@ -178,7 +177,7 @@ const CropImage: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
-      <div className="bg-gray-800 rounded-lg p-6 space-y-6 border border-gray-700">
+      <div className="bg-zinc-900 rounded-lg p-6 space-y-6 border border-zinc-800">
         <h3 className="text-lg font-semibold text-white">Crop Settings</h3>
         
         {/* Aspect Ratio Buttons */}
@@ -191,7 +190,7 @@ const CropImage: React.FC = () => {
                 variant={aspectRatio === ar.value ? 'primary' : 'secondary'}
                 onClick={() => handleAspectRatioButtonClick(ar.value)}
                 disabled={!imageFile}
-                className="px-4 py-2"
+                className="px-4 py-2 !rounded-md"
               >
                 {ar.label}
               </Button>
@@ -201,9 +200,9 @@ const CropImage: React.FC = () => {
 
         {/* Real-time Dimensions Display */}
         {completedCrop && croppedPixelDimensions && (
-          <div className="pt-4 border-t border-gray-700">
+          <div className="pt-4 border-t border-zinc-800">
             <h4 className="text-sm font-medium text-gray-300 mb-2">Selected Crop Dimensions</h4>
-            <p className="text-xl font-mono text-teal-300">
+            <p className="text-xl font-mono text-[#1DB954]">
               {croppedPixelDimensions.width}px × {croppedPixelDimensions.height}px
             </p>
           </div>
@@ -237,9 +236,9 @@ const CropImage: React.FC = () => {
         </Button>
       </div>
 
-      <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+      <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800">
         <h3 className="text-lg font-semibold text-white mb-4">Interactive Cropper</h3>
-        <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] overflow-hidden relative">
+        <div className="bg-black/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] overflow-hidden relative">
           {!imageFile ? (
             <ImageUploader onFileSelect={handleImageUpload} multiple={false} accept="image/*" title="Upload an image to crop" description="Select an area and download the cropped result."/>
           ) : (
@@ -271,10 +270,10 @@ const CropImage: React.FC = () => {
       </div>
 
       {croppedImageUrl && (
-          <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
+          <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800">
               <h3 className="text-lg font-semibold text-white mb-4">Cropped Result Preview</h3>
-              <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[30vh]">
-                  <img src={croppedImageUrl} alt="Cropped Result" className="max-w-full max-h-full object-contain rounded-md" />
+              <div className="bg-black/50 p-2 rounded-lg flex items-center justify-center min-h-[30vh]">
+                  <img src={croppedImageUrl} alt="Cropped Result" className="max-w-full max-h-full object-contain rounded-md" loading="lazy" />
               </div>
           </div>
       )}

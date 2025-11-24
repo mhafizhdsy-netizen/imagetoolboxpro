@@ -453,6 +453,7 @@ const ImageToPdf: React.FC = () => {
                       src={file.preview}
                       alt={`Page ${index + 1}`}
                       className="object-cover w-full h-full"
+                      loading="lazy"
                     />
                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <span className="text-white text-xl font-bold">{index + 1}</span>

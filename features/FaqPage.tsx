@@ -180,6 +180,17 @@ const toolDescriptions: Record<string, React.ReactNode> = {
             </ul>
         </div>
     ),
+     'Match Image Color': (
+        <div className="space-y-2">
+            <p>Transfer the color palette from a source image to a target image. This tool effectively "recolors" one image using the style of another, great for creating a consistent aesthetic across different photos.</p>
+             <ul className="list-disc list-inside text-gray-400 space-y-1 pl-2">
+                <li>Upload a <strong>Source Image</strong> to extract its color palette.</li>
+                <li>Upload a <strong>Target Image</strong> that you want to recolor.</li>
+                <li>Adjust the <strong>Palette Size</strong> slider to control how many dominant colors are used from the source. A smaller palette creates a more abstract, posterized effect, while a larger palette preserves more detail.</li>
+                <li>The tool replaces each pixel in the target image with the closest available color from the source's palette.</li>
+            </ul>
+        </div>
+    ),
     'HTML to Image': (
         <div className="space-y-2">
             <p>A unique, two-step AI tool that converts HTML code into a visual representation. It does not render the HTML directly, but interprets it creatively.</p>
@@ -251,14 +262,14 @@ const FaqPage: React.FC = () => {
 
             <div className="space-y-4">
                 {faqTools.map((tool, index) => (
-                    <div key={tool.name} className="bg-gray-800/60 border border-gray-700/80 rounded-lg overflow-hidden transition-all duration-300">
+                    <div key={tool.name} className="bg-zinc-900/60 border border-zinc-800/80 rounded-lg overflow-hidden transition-all duration-300">
                         <button
                             onClick={() => toggleFaq(index)}
-                            className="w-full flex justify-between items-center p-5 text-left text-lg font-semibold text-gray-100 hover:bg-gray-700/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400"
+                            className="w-full flex justify-between items-center p-5 text-left text-lg font-semibold text-gray-100 hover:bg-zinc-800/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1DB954]"
                             aria-expanded={openIndex === index}
                         >
                             <span className="flex items-center gap-4">
-                                <span className="text-2xl text-teal-300">{tool.icon}</span>
+                                <span className="text-2xl text-[#1DB954]">{tool.icon}</span>
                                 {tool.name}
                             </span>
                             <span>
@@ -269,7 +280,7 @@ const FaqPage: React.FC = () => {
                             className={`transition-all duration-500 ease-in-out overflow-hidden ${openIndex === index ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}
                         >
                             <div className="p-5 pt-0">
-                               <div className="border-t border-gray-700 pt-4 text-gray-300 prose prose-invert max-w-none prose-p:my-2 prose-ul:my-2">
+                               <div className="border-t border-zinc-800 pt-4 text-gray-300 prose prose-invert max-w-none prose-p:my-2 prose-ul:my-2">
                                 {toolDescriptions[tool.name] || <p>No detailed description available for this tool yet.</p>}
                                </div>
                             </div>

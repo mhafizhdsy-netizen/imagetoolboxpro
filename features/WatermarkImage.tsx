@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { Button } from '../components/Button';
@@ -230,16 +229,16 @@ const WatermarkImage: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-4 space-y-6">
-        <div className="bg-gray-800 rounded-lg p-6 space-y-6 border border-gray-700">
+        <div className="bg-zinc-900 rounded-lg p-6 space-y-6 border border-zinc-800">
             <h3 className="text-lg font-semibold text-white">Watermark Settings</h3>
 
             {/* Watermark Type Selector */}
-            <div className="space-y-2 pt-2 border-t border-gray-700">
+            <div className="space-y-2 pt-2 border-t border-zinc-800">
                 <label className="block text-sm font-medium text-gray-300 mb-2">Watermark Type</label>
-                <div className="flex rounded-lg overflow-hidden bg-gray-700">
+                <div className="flex rounded-lg overflow-hidden bg-zinc-800">
                     <button
                         className={`flex-1 flex items-center justify-center py-2 px-3 text-sm font-medium transition-colors ${
-                            watermarkType === 'text' ? 'bg-teal-500 text-white' : 'text-gray-300 hover:bg-gray-600'
+                            watermarkType === 'text' ? 'bg-[#1DB954] text-black' : 'text-gray-300 hover:bg-zinc-700'
                         } disabled:opacity-50`}
                         onClick={() => setWatermarkType('text')}
                         disabled={!imageFile}
@@ -248,7 +247,7 @@ const WatermarkImage: React.FC = () => {
                     </button>
                     <button
                         className={`flex-1 flex items-center justify-center py-2 px-3 text-sm font-medium transition-colors ${
-                            watermarkType === 'image' ? 'bg-teal-500 text-white' : 'text-gray-300 hover:bg-gray-600'
+                            watermarkType === 'image' ? 'bg-[#1DB954] text-black' : 'text-gray-300 hover:bg-zinc-700'
                         } disabled:opacity-50`}
                         onClick={() => setWatermarkType('image')}
                         disabled={!imageFile}
@@ -284,7 +283,7 @@ const WatermarkImage: React.FC = () => {
                                 accept="image/*"
                             />
                         ) : (
-                            <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-gray-700 bg-gray-900/50 flex items-center justify-center">
+                            <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-zinc-700 bg-black/50 flex items-center justify-center">
                                 <img src={watermarkImageUrl} alt="Watermark preview" className="max-w-full max-h-full object-contain p-2" />
                                 <button
                                     onClick={() => { setWatermarkImageFile(null); setWatermarkImageUrl(null); }}
@@ -302,7 +301,7 @@ const WatermarkImage: React.FC = () => {
                 <div>
                 <label htmlFor="size-slider" className="flex justify-between text-sm font-medium text-gray-300 mb-2">
                     <span>Size</span>
-                    <span className="font-mono text-teal-300">{size}%</span>
+                    <span className="font-mono text-[#1DB954]">{size}%</span>
                 </label>
                 <input type="range" id="size-slider" min="1" max="50" step="1" value={size} onChange={(e) => setSize(parseFloat(e.target.value))} className="w-full range-slider" disabled={!imageFile}/>
               </div>
@@ -310,19 +309,19 @@ const WatermarkImage: React.FC = () => {
               <div>
                 <label htmlFor="opacity-slider" className="flex justify-between text-sm font-medium text-gray-300 mb-2">
                     <span>Opacity</span>
-                    <span className="font-mono text-teal-300">{Math.round(opacity * 100)}%</span>
+                    <span className="font-mono text-[#1DB954]">{Math.round(opacity * 100)}%</span>
                 </label>
                 <input type="range" id="opacity-slider" min="0" max="1" step="0.05" value={opacity} onChange={(e) => setOpacity(parseFloat(e.target.value))} className="w-full range-slider" disabled={!imageFile}/>
               </div>
 
               {/* New Tiling Option */}
-              <div className="flex items-center pt-4 border-t border-gray-700">
+              <div className="flex items-center pt-4 border-t border-zinc-800">
                   <input 
                       id="tile-watermark" 
                       type="checkbox" 
                       checked={isTiled} 
                       onChange={(e) => setIsTiled(e.target.checked)} 
-                      className="h-4 w-4 rounded border-gray-600 bg-gray-700 text-teal-500 focus:ring-teal-500" 
+                      className="h-4 w-4 rounded border-zinc-600 bg-zinc-700 text-[#1DB954] focus:ring-[#1DB954]" 
                       disabled={!imageFile}
                   />
                   <label htmlFor="tile-watermark" className="ml-3 block text-sm font-medium text-gray-300">Tile Watermark</label>
@@ -361,8 +360,8 @@ const WatermarkImage: React.FC = () => {
         </Button>
       </div>
       <div className="lg:col-span-8">
-        <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 sticky top-24">
-            <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] overflow-hidden">
+        <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 sticky top-24">
+            <div className="bg-black/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] overflow-hidden">
               {!imageFile ? (
                 <ImageUploader onFileSelect={handleImageUpload} multiple={false} accept="image/*" />
               ) : (

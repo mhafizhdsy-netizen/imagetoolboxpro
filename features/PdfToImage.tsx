@@ -1,5 +1,6 @@
 
 
+
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { Button } from '../components/Button';
@@ -534,36 +535,32 @@ const PdfToImage: React.FC = () => {
                   </Button>
                 </div>
               )}
-              {isLoading && (
-                <div className="bg-gray-900/50 p-2 rounded-lg flex flex-col items-center justify-center min-h-[20vh] relative">
-                  <LoadingSpinner />
-                  <p className="text-gray-400 mt-4">Converting PDF pages...</p>
-                </div>
-              )}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-2 bg-gray-900/50 rounded-lg">
-                {generatedImages.map((img) => (
-                  <div
-                    key={img.id}
-                    className={`relative group aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg border-2 transition-all duration-200 cursor-pointer 
-                                ${selectedImages.has(img.id) ? 'border-teal-400 ring-2 ring-teal-400' : 'border-gray-700 hover:border-teal-500/70'}`}
-                    onClick={() => handleToggleImageSelection(img.id)}
-                  >
-                    <img src={img.dataUrl} alt={`Page ${img.pageNum}`} className="object-cover w-full h-full" />
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span className="text-white text-lg font-bold">Page {img.pageNum}</span>
+              {generatedImages.length > 0 && (
+                <div
+                  className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 p-2 min-h-[40vh] bg-gray-900/50 rounded-lg max-h-[70vh] overflow-y-auto"
+                >
+                  {generatedImages.map((img) => (
+                    <div
+                      key={img.id}
+                      className={`relative group aspect-square w-full overflow-hidden rounded-lg border-2 transition-all duration-200 cursor-pointer
+                                  ${selectedImages.has(img.id) ? 'border-teal-400 ring-2 ring-teal-400/50' : 'border-gray-700 hover:border-teal-500/70'}`}
+                      onClick={() => handleToggleImageSelection(img.id)}
+                    >
+                      <img src={img.dataUrl} alt={`Page ${img.pageNum}`} className="object-cover w-full h-full" loading="lazy" />
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="text-white text-lg font-bold">Page {img.pageNum}</span>
+                      </div>
                       <div className="absolute top-2 right-2">
-                        {/* FIX: CheckIcon now correctly accepts className */}
                         {selectedImages.has(img.id) ? (
                           <CheckIcon className="w-5 h-5 text-teal-400 bg-black/70 rounded-full p-0.5" />
                         ) : (
-                          // FIX: XMarkIcon now correctly accepts className
-                          <XMarkIcon className="w-5 h-5 text-gray-400 bg-black/70 rounded-full p-0.5 opacity-0 group-hover:opacity-100" />
+                          <div className="w-5 h-5 bg-black/50 border-2 border-gray-400 rounded-full opacity-0 group-hover:opacity-100" />
                         )}
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </>
           )}
           <canvas ref={canvasRef} style={{ display: 'none' }} />

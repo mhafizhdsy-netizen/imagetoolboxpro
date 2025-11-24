@@ -717,7 +717,7 @@ const NoiseGenerator: React.FC = () => {
               <p className="text-gray-400 text-sm p-4 text-center">Adjust settings and click 'Generate Noise'</p>
             )}
             {generatedImageUrl && !isLoading && (
-              <img src={generatedImageUrl} alt="Generated Noise" className="max-w-full max-h-full object-contain rounded-md" />
+              <img src={generatedImageUrl} alt="Generated Noise" className="max-w-full max-h-full object-contain rounded-md" loading="lazy" />
             )}
             {error && !isLoading && (
               <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg text-red-300 absolute inset-4 flex items-center justify-center text-center">

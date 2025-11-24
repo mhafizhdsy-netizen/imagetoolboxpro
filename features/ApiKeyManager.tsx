@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { useSettings } from '../contexts/SettingsContext';
 import { Button } from '../components/Button';
@@ -34,9 +32,9 @@ const ApiKeyManager: React.FC = () => {
   };
 
   const ApiCard = ({ title, description, link, linkText, value, onChange, placeholder }: any) => (
-    <div className="bg-gray-800 p-6 rounded-lg border border-gray-700 space-y-4">
+    <div className="bg-zinc-900 p-6 rounded-lg border border-zinc-800 space-y-4">
         <div className="flex-grow">
-          <h3 className="text-lg font-semibold text-teal-400">{title}</h3>
+          <h3 className="text-lg font-semibold text-[#1DB954]">{title}</h3>
           <p className="text-sm text-gray-400 mt-1">{description}</p>
         </div>
         <div>
@@ -49,7 +47,7 @@ const ApiKeyManager: React.FC = () => {
                 placeholder={placeholder}
                 className="custom-input"
             />
-            <p className="text-xs text-gray-500 mt-2">Get your free key from <a href={link} target="_blank" rel="noopener noreferrer" className="underline hover:text-teal-400">{linkText}</a>.</p>
+            <p className="text-xs text-gray-500 mt-2">Get your free key from <a href={link} target="_blank" rel="noopener noreferrer" className="underline hover:text-[#1DB954]">{linkText}</a>.</p>
         </div>
     </div>
   );

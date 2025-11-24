@@ -27,7 +27,7 @@ const App: React.FC = () => {
 
   return (
     <SettingsProvider>
-      <div className="flex min-h-screen bg-gray-900 text-gray-200 font-sans">
+      <div className="flex min-h-screen text-gray-200">
         <Sidebar
           activeTool={activeTool}
           setActiveTool={setActiveTool}
@@ -51,9 +51,9 @@ const App: React.FC = () => {
             </div>
           </main>
           {/* Footer Section - Enhanced Design */}
-          <footer className="flex-shrink-0 bg-gradient-to-t from-gray-900 via-gray-900/90 to-transparent border-t border-gray-800/70 p-6 sm:p-8 text-center text-sm text-gray-400">
+          <footer className="flex-shrink-0 bg-gradient-to-t from-zinc-900 via-zinc-900/90 to-transparent border-t border-zinc-800/70 p-6 sm:p-8 text-center text-sm text-gray-400">
             <p className="tracking-wide text-gray-500 hover:text-gray-400 transition-colors duration-200">
-              &copy; {currentYear} <span className="text-teal-400 font-semibold">Copyright By Rio</span>, All Rights Reserved.
+              &copy; {currentYear} <span className="text-[#1DB954] font-semibold">Copyright By Rio</span>, All Rights Reserved.
             </p>
           </footer>
         </div>

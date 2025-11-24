@@ -16,12 +16,12 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseClasses =
-    'inline-flex items-center justify-center rounded-md px-5 py-2.5 text-sm font-semibold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 disabled:opacity-50 disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-bold tracking-wide transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:scale-105 active:scale-100';
 
   const variantClasses = {
-    primary: 'bg-teal-500 text-white hover:bg-teal-600 focus-visible:ring-teal-400 shadow-sm',
-    secondary: 'bg-gray-700 text-gray-200 hover:bg-gray-600 focus-visible:ring-gray-500',
-    outline: 'bg-transparent border border-gray-600 text-gray-300 hover:bg-gray-800 focus-visible:ring-gray-500',
+    primary: 'bg-[#1DB954] text-black hover:bg-[#1ed760] focus-visible:ring-[#1DB954]',
+    secondary: 'bg-zinc-800 text-gray-200 hover:bg-zinc-700 focus-visible:ring-zinc-600',
+    outline: 'bg-transparent border border-zinc-700 text-gray-300 hover:bg-zinc-800 focus-visible:ring-zinc-600',
   };
 
   return (

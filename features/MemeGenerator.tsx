@@ -93,7 +93,7 @@ const MemeGenerator: React.FC = () => {
   }
 
   const LoadingSpinner = () => (
-    <div className="absolute inset-0 flex items-center justify-center bg-gray-900/50 rounded-lg">
+    <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-lg">
         <svg className="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -104,7 +104,7 @@ const MemeGenerator: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-4 space-y-6">
-        <div className="bg-gray-800 rounded-lg p-6 space-y-6 border border-gray-700">
+        <div className="bg-zinc-900 rounded-lg p-6 space-y-6 border border-zinc-800">
             <h3 className="text-lg font-semibold text-white">Customize Your Meme</h3>
             <div className="space-y-4">
               <div>
@@ -116,7 +116,7 @@ const MemeGenerator: React.FC = () => {
                 <input type="text" id="bottom-text" value={bottomText} onChange={(e) => setBottomText(e.target.value)} className="custom-input" disabled={!imageFile}/>
               </div>
             </div>
-            <div className="flex flex-col gap-4 pt-4 border-t border-gray-700">
+            <div className="flex flex-col gap-4 pt-4 border-t border-zinc-800">
                 <Button icon={<AIIcon />} onClick={handleGenerateCaption} isLoading={isLoading} disabled={!imageFile}>
                     Generate with AI
                 </Button>
@@ -130,17 +130,17 @@ const MemeGenerator: React.FC = () => {
         </Button>
       </div>
       <div className="lg:col-span-8">
-         <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 sticky top-24">
-            <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center relative min-h-[40vh]">
+         <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 sticky top-24">
+            <div className="bg-black/50 p-2 rounded-lg flex items-center justify-center relative min-h-[40vh]">
                 {!imageFile ? (
                   <ImageUploader onFileSelect={handleImageUpload} multiple={false} accept="image/*" />
                 ) : (
                   <>
                     {isLoading && <LoadingSpinner />}
                     {memeDataUrl ? (
-                        <img src={memeDataUrl} alt="Meme preview" className="max-w-full object-contain rounded-md" />
+                        <img src={memeDataUrl} alt="Meme preview" className="max-w-full object-contain rounded-md" loading="lazy" />
                     ) : (
-                        <div className="w-full h-full bg-gray-700 flex items-center justify-center rounded-md">
+                        <div className="w-full h-full bg-zinc-800 flex items-center justify-center rounded-md">
                             <p className="text-gray-400">Loading Preview...</p>
                         </div>
                     )}

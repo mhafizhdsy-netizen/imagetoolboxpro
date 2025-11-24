@@ -81,12 +81,12 @@ const RotateImage: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-4 space-y-6">
-        <div className="bg-gray-800 rounded-lg p-6 space-y-6 border border-gray-700">
+        <div className="bg-zinc-900 rounded-lg p-6 space-y-6 border border-zinc-800">
             <h3 className="text-lg font-semibold text-white">Rotate Options</h3>
             <div>
               <label htmlFor="rotation-slider" className="flex justify-between text-sm font-medium text-gray-300 mb-2">
                   <span>Rotation Angle</span>
-                  <span className="font-mono text-teal-300 text-lg">{rotation}°</span>
+                  <span className="font-mono text-[#1DB954] text-lg">{rotation}°</span>
               </label>
               <input 
                   type="range" 
@@ -100,7 +100,7 @@ const RotateImage: React.FC = () => {
                   disabled={!imageFile}
               />
             </div>
-            <div className="flex justify-between gap-2 pt-4 border-t border-gray-700">
+            <div className="flex justify-between gap-2 pt-4 border-t border-zinc-800">
                 <Button onClick={() => handleRotate(-90)} variant="secondary" icon={<ArrowUturnLeftIcon />} disabled={!imageFile}>
                     Rotate Left
                 </Button>
@@ -123,8 +123,8 @@ const RotateImage: React.FC = () => {
         </Button>
       </div>
       <div className="lg:col-span-8">
-        <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 sticky top-24">
-            <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] overflow-hidden">
+        <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 sticky top-24">
+            <div className="bg-black/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] overflow-hidden">
               {!imageFile ? (
                 <ImageUploader onFileSelect={handleImageUpload} multiple={false} accept="image/*" />
               ) : (

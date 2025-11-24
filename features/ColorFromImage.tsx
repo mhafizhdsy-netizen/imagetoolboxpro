@@ -83,7 +83,7 @@ const ColorFromImage: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       <div className="lg:col-span-4 space-y-6">
-        <div className="bg-gray-800 rounded-lg p-6 space-y-4 border border-gray-700">
+        <div className="bg-zinc-900 rounded-lg p-6 space-y-4 border border-zinc-800">
             <h3 className="text-lg font-semibold text-white">Color Palette Extractor</h3>
             <p className="text-sm text-gray-400">
               This tool analyzes your image to find the most dominant colors. Click on any color swatch to copy its HEX code to your clipboard.
@@ -94,12 +94,12 @@ const ColorFromImage: React.FC = () => {
         </Button>
       </div>
       <div className="lg:col-span-8">
-        <div className="bg-gray-800 p-4 rounded-lg border border-gray-700 sticky top-24">
-          <div className="bg-gray-900/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] mb-6">
+        <div className="bg-zinc-900 p-4 rounded-lg border border-zinc-800 sticky top-24">
+          <div className="bg-black/50 p-2 rounded-lg flex items-center justify-center min-h-[40vh] mb-6">
             {!imageFile ? (
               <ImageUploader onFileSelect={handleImageUpload} multiple={false} accept="image/*" title="Get Color Palette from Image" />
             ) : (
-              <img src={imageUrl ?? ''} alt="Uploaded preview" className="max-w-full object-contain rounded-md" />
+              <img src={imageUrl ?? ''} alt="Uploaded preview" className="max-w-full object-contain rounded-md" loading="lazy" />
             )}
           </div>
 
@@ -112,7 +112,7 @@ const ColorFromImage: React.FC = () => {
                     <div key={hex} className="space-y-2 group" onClick={() => handleColorClick(hex)}>
                         <div 
                           style={{ backgroundColor: hex }} 
-                          className="h-24 rounded-lg shadow-lg border-2 border-transparent group-hover:border-teal-400 transition-all cursor-pointer relative"
+                          className="h-24 rounded-lg shadow-lg border-2 border-transparent group-hover:border-[#1DB954] transition-all cursor-pointer relative"
                         >
                            {copiedColor === hex && (
                             <div className="absolute inset-0 bg-black/70 flex items-center justify-center rounded-md">

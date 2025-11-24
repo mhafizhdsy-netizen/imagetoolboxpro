@@ -8,7 +8,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ toolName, setIsSidebarOpen }) => {
   return (
-    <header className="flex-shrink-0 bg-gray-900/70 backdrop-blur-lg border-b border-gray-700/60 z-10 sticky top-0">
+    <header className="flex-shrink-0 bg-black/70 backdrop-blur-lg border-b border-zinc-800/60 z-10 sticky top-0">
       <div className="flex items-center justify-between h-20 px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4">
             {/* Mobile menu button */}

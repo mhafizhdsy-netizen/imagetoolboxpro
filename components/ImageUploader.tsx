@@ -57,10 +57,10 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     <div className="w-full max-w-4xl mx-auto">
       <label
         htmlFor="file-upload"
-        className={`group relative flex justify-center w-full rounded-2xl border-2 border-dashed p-12 lg:p-24 text-center transition-all duration-300 ease-in-out
+        className={`group relative flex justify-center w-full rounded-3xl border-2 border-dashed p-12 lg:p-24 text-center transition-all duration-300 ease-in-out
         ${isDragging 
-          ? 'border-solid border-teal-400 bg-gray-800/50' 
-          : 'border-gray-700 hover:border-teal-500/70'
+          ? 'border-solid border-[#1DB954] bg-[#1DB954]/10 scale-105' 
+          : 'border-zinc-800 hover:border-[#1DB954]/50 hover:bg-zinc-900'
         } ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
         `}
         onDrop={disabled ? undefined : handleDrop} // Disable event if component is disabled
@@ -68,7 +68,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         onDragLeave={disabled ? undefined : handleDragLeave} // Disable event if component is disabled
       >
         <div className="flex flex-col items-center justify-center space-y-4">
-          <div className={`text-6xl text-gray-600 transition-all duration-300 ease-in-out ${isDragging ? 'scale-110 text-teal-400' : 'group-hover:text-gray-500'}`}>
+          <div className={`text-6xl text-zinc-600 transition-all duration-300 ease-in-out ${isDragging ? 'scale-110 text-[#1DB954]' : 'group-hover:text-zinc-500'}`}>
             <PhotoIcon />
           </div>
           <div>
